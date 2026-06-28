@@ -1,0 +1,7 @@
+condition,engine_file,map50,map50_95,latency_p50_ms,latency_p95_ms,throughput_fps,gpu_memory_mb,model_size_mb
+YOLOv8n FP32 (baseline),yolov8n_fp32.engine,0.9803,0.6433,,,,,13.18
+YOLOv8n FP16,yolov8n_fp16.engine,0.9803,0.6433,,,,,8.65
+YOLOv8n INT8 PTQ (uniform),yolov8n_int8_ptq.engine,0.9803,0.6433,,,,,4.49
+YOLOv8n Mixed-PTQ tight,yolov8n_mixed_tight.engine,0.9803,0.6433,3.24341,3.67706,327.915,,4.49
+YOLOv8n Mixed-PTQ medium,yolov8n_mixed_medium.engine,0.9803,0.6433,3.17065,3.6308,336.218,,4.48
+YOLOv8n Mixed-PTQ relaxed,yolov8n_mixed_relaxed.engine,0.9803,0.6433,3.17139,3.59512,337.009,,4.46

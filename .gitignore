@@ -1,0 +1,85 @@
+# ============================================================
+#  .gitignore for the Papers repo (Vision + quantization)
+#  Goal: keep source code, paper text, results/ and plots/.
+#  Ignore large, regenerable artifacts: model weights,
+#  exported models, training runs, datasets, caches.
+# ============================================================
+
+# --- Model weights & exported formats (large, regenerable) ---
+*.pt
+*.pth
+*.onnx
+*.engine
+*.torchscript
+*.mnn
+*.param
+*.bin
+*.tflite
+*.pb
+# directory-style exports
+*_ncnn_model/
+*_openvino_model/
+*_saved_model/
+
+# Calibration / sample tensors
+*.npy
+
+# --- Training & inference run outputs (~1.5 GB) ---
+# Contains checkpoints, exported weights, predictions, per-run curves.
+runs/
+
+# --- Vision project (not part of this repo) ---
+Vision/
+
+# --- Datasets (images + labels) ---
+**/datasets/
+**/distill_ds/
+**/calibration_images/
+**/calibration_labels/
+**/calib_ds/
+# Ultralytics label caches
+*.cache
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+
+# --- Logs & temp ---
+*.log
+*.tmp
+
+# --- Paper write-up (uploaded separately as the complete paper) ---
+**/paper/
+
+# --- Embedded sub-repos (have their own .git) ---
+**/experiment-agent/
+
+# --- LaTeX build artifacts ---
+*.aux
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.out
+*.toc
+*.lof
+*.lot
+
+# --- OS / editor cruft ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ============================================================
+#  Kept on purpose (NOT ignored): nothing below is matched
+#  above, so these stay tracked —
+#    quantization/results/   (CSV/JSON metrics + figures/ PNGs)
+#    all *.py / *.sh / *.yaml scripts & configs in quantization/
+# Only the quantization/ folder is tracked; Vision/ is ignored.
+# ============================================================

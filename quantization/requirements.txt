@@ -1,0 +1,54 @@
+# ============================================================
+# Workstation requirements (GPU, CUDA 12.1)
+# ============================================================
+#
+# pytorch-quantization is Linux-only — do NOT install it on Windows.
+# None of the workstation scripts use it; TensorRT handles quantization
+# natively on the Jetson.
+#
+# 1. Create and activate the conda environment:
+#
+#    conda create -n yolo-quant python=3.10 -y
+#    conda activate yolo-quant
+#
+# 2. Install PyTorch with CUDA (do this BEFORE pip install -r requirements.txt):
+#
+#    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+#
+#    For CUDA 11.8 instead:
+#    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+#
+# 3. Install everything else:
+#
+#    pip install -r requirements.txt
+#
+# ============================================================
+# NOTE FOR JETSON (run these on-device instead):
+#
+#   PyTorch comes pre-installed via JetPack — do NOT reinstall it.
+#   TensorRT is also pre-installed via JetPack — no extra install needed.
+#   Only install:
+#     pip install ultralytics matplotlib numpy onnx opencv-python-headless pandas pycuda
+#   pycuda is required by 05b_export_mixed.py for the INT8 calibration buffer.
+# ============================================================
+
+# Core detection framework
+ultralytics>=8.2.0
+
+# Numerical + plotting
+numpy>=1.24.0
+matplotlib>=3.7.0
+scipy>=1.10.0
+
+# ONNX export
+onnx>=1.14.0
+onnxruntime>=1.16.0          # CPU runtime for quick validation; not needed on Jetson
+
+# Image I/O (Ultralytics pulls this in, pinned for stability)
+opencv-python>=4.8.0
+Pillow>=10.0.0
+
+# Utilities
+tqdm>=4.65.0
+PyYAML>=6.0
+pandas>=2.0.0                # optional — useful for inspecting result CSVs
