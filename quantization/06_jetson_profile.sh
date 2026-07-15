@@ -57,6 +57,33 @@ echo ""
 echo ""
 echo "Raw profile saved to ${RAW_PROFILE}"
 
+# Per-layer profiles of the FP16 and INT8 engines — consumed by
+# 03c_int8_latency_trtexec.py to derive MEASURED per-layer INT8 latency
+# (replaces the former alpha = 0.5 datasheet approximation).
+for PREC in fp16 int8; do
+    if [ "${PREC}" = "int8" ]; then
+        PREC_ENGINE="${SCRIPT_DIR}/runs/engines/yolov8n_int8_ptq.engine"
+    else
+        PREC_ENGINE="${SCRIPT_DIR}/runs/engines/yolov8n_${PREC}.engine"
+    fi
+    PREC_PROFILE="${RESULTS_DIR}/trtexec_profile_${PREC}.txt"
+    if [ ! -f "${PREC_ENGINE}" ]; then
+        echo "WARNING: ${PREC_ENGINE} not found — skipping ${PREC} profile."
+        continue
+    fi
+    echo ""
+    echo "=== Per-layer profile: ${PREC} engine ==="
+    "${TRTEXEC}" \
+        --loadEngine="${PREC_ENGINE}" \
+        --warmUp=500 \
+        --iterations=1000 \
+        --dumpProfile \
+        --separateProfileRun \
+        --percentile=50,95 \
+        2>&1 | tee "${PREC_PROFILE}"
+    echo "Saved ${PREC_PROFILE}"
+done
+
 # Parse the dumpProfile output into CSV (fused TRT layer names — for heatmap figure only)
 # trtexec dumpProfile format:
 #   [layer_name] median: X.XXX ms  time%: Y.YY%
@@ -126,6 +153,7 @@ done
 echo ""
 echo "Done."
 echo "Next steps:"
-echo "  python3 03b_latency_jetson.py   # per-layer latency with PyTorch names → layer_latency_jetson.csv"
-echo "  python3 04_assignment.py         # greedy mixed-precision assignment"
-echo "  python3 05b_export_mixed.py      # build mixed-precision TRT engines"
+echo "  python3 03b_latency_jetson.py            # per-layer latency with PyTorch names → layer_latency_jetson.csv"
+echo "  python3 03c_int8_latency_trtexec.py      # measured per-layer INT8 latency → layer_latency_measured.csv"
+echo "  python3 04_assignment.py                 # greedy mixed-precision assignment (measured latency)"
+echo "  python3 05b_export_mixed.py              # build mixed-precision TRT engines"

@@ -2,54 +2,79 @@
 Phase 7: Structured benchmark of all engine conditions on the Jetson.
 Run ON THE JETSON after all engines are built.
 
-Measures: mAP50, mAP50-95, latency P50, latency P95, throughput, GPU memory, model size.
+Measures, per engine:
+  - mAP50 / mAP50-95 by validating THE COMPILED TRT ENGINE ITSELF
+    (Ultralytics loads .engine files directly) on the full validation split
+  - latency P50 / P95 and throughput from trtexec, repeated N_RUNS times,
+    reported as median +/- std across runs
+  - GPU memory and serialized engine size
 
-Conditions benchmarked:
-  1. FP32 baseline
-  2. FP16 TensorRT
-  3. INT8 PTQ (uniform)
-  4. Mixed-precision PTQ tight   (if assignment_tight engine exists)
-  5. Mixed-precision PTQ medium  (if assignment_medium engine exists)
-  6. Mixed-precision PTQ relaxed (if assignment_relaxed engine exists)
-  Also: YOLOv8s FP32 and YOLOv8x FP32 as reference models.
+Also records the device power/clock configuration (nvpmodel, jetson_clocks)
+to results/jetson_env.txt so the benchmark is reproducible.
 
-Output: results/results_main.csv
+Output: results/results_main.csv  (one row per condition, with variance)
 """
 
 import csv
+import statistics
 import subprocess
 import re
 from pathlib import Path
 
 from ultralytics import YOLO
 
-DATA_YAML   = Path(__file__).parent / "data_jetson.yaml"  # Jetson-local dataset
-ENGINES_DIR = Path(__file__).parent / "runs" / "engines"
-RESULTS_DIR = Path(__file__).parent / "results"
+BASE        = Path(__file__).parent
+DATA_YAML   = BASE / "data_jetson.yaml"   # must point at the FULL val split
+ENGINES_DIR = BASE / "runs" / "engines"
+RESULTS_DIR = BASE / "results"
 OUT_CSV     = RESULTS_DIR / "results_main.csv"
+ENV_TXT     = RESULTS_DIR / "jetson_env.txt"
 TRTEXEC     = "/usr/src/tensorrt/bin/trtexec"
 
 RESULTS_DIR.mkdir(exist_ok=True)
 
-IMGSZ    = 640
-WARMUP   = 100   # reduced to avoid OOM on Jetson unified memory
-ITERS    = 200
+IMGSZ   = 640
+WARMUP  = 100
+ITERS   = 200
+N_RUNS  = 5      # repeated trtexec runs for run-to-run variance
 
-# Engines to benchmark: (label, engine_filename, weights_for_map)
+# (label, engine_filename)
 CONDITIONS = [
-    ("YOLOv8x FP32 (teacher)",      "yolov8x_fp32.engine",         "yolov8x.pt"),
-    ("YOLOv8s FP32 (reference)",     "yolov8s_fp32.engine",         "yolov8s.pt"),
-    ("YOLOv8n FP32 (baseline)",      "yolov8n_fp32.engine",         "runs/baseline/weights/best.pt"),
-    ("YOLOv8n FP16",                 "yolov8n_fp16.engine",         "runs/baseline/weights/best.pt"),
-    ("YOLOv8n INT8 PTQ (uniform)",   "yolov8n_int8_ptq.engine",     "runs/baseline/weights/best.pt"),
-    ("YOLOv8n Mixed-PTQ tight",      "yolov8n_mixed_tight.engine",  "runs/baseline/weights/best.pt"),
-    ("YOLOv8n Mixed-PTQ medium",     "yolov8n_mixed_medium.engine", "runs/baseline/weights/best.pt"),
-    ("YOLOv8n Mixed-PTQ relaxed",    "yolov8n_mixed_relaxed.engine","runs/baseline/weights/best.pt"),
+    ("YOLOv8n FP32 (baseline)",        "yolov8n_fp32.engine"),
+    ("YOLOv8n FP16",                   "yolov8n_fp16.engine"),
+    ("YOLOv8n INT8 PTQ (uniform)",     "yolov8n_int8_ptq.engine"),
+    ("YOLOv8n Mixed-PTQ tight",        "yolov8n_mixed_tight.engine"),
+    ("YOLOv8n Mixed-PTQ medium",       "yolov8n_mixed_medium.engine"),
+    ("YOLOv8n Mixed-PTQ relaxed",      "yolov8n_mixed_relaxed.engine"),
+    # HAWQ-style Hessian-trace baseline assignments (04b)
+    ("YOLOv8n Mixed-HAWQ tight",       "yolov8n_mixed_hawq_tight.engine"),
+    ("YOLOv8n Mixed-HAWQ medium",      "yolov8n_mixed_hawq_medium.engine"),
+    ("YOLOv8n Mixed-HAWQ relaxed",     "yolov8n_mixed_hawq_relaxed.engine"),
+    # FLOPs-proxy latency ablation assignments (04b)
+    ("YOLOv8n Mixed-FLOPsProxy tight",   "yolov8n_mixed_flopsproxy_tight.engine"),
+    ("YOLOv8n Mixed-FLOPsProxy medium",  "yolov8n_mixed_flopsproxy_medium.engine"),
+    ("YOLOv8n Mixed-FLOPsProxy relaxed", "yolov8n_mixed_flopsproxy_relaxed.engine"),
 ]
 
 
-def run_trtexec(engine_path: Path) -> dict:
-    """Run trtexec and parse latency / throughput metrics."""
+def record_environment() -> None:
+    """Save power mode and clock state alongside the results."""
+    blocks = []
+    for cmd in (["nvpmodel", "-q"],
+                ["jetson_clocks", "--show"],
+                ["cat", "/etc/nv_tegra_release"],
+                ["uname", "-a"]):
+        try:
+            out = subprocess.run(cmd, capture_output=True, text=True,
+                                 timeout=30)
+            blocks.append(f"$ {' '.join(cmd)}\n{out.stdout}{out.stderr}")
+        except Exception as exc:
+            blocks.append(f"$ {' '.join(cmd)}\n(unavailable: {exc})")
+    ENV_TXT.write_text("\n".join(blocks))
+    print(f"Device environment recorded to {ENV_TXT}")
+
+
+def run_trtexec_once(engine_path: Path) -> dict:
     cmd = [
         TRTEXEC,
         f"--loadEngine={engine_path}",
@@ -60,55 +85,54 @@ def run_trtexec(engine_path: Path) -> dict:
     result = subprocess.run(cmd, capture_output=True, text=True)
     output = result.stdout + result.stderr
 
-    def find(pattern, default="N/A"):
+    def find(pattern):
         m = re.search(pattern, output)
-        return m.group(1) if m else default
-
-    # TRT 10.x format: percentile(50%) = X.XXX ms
-    latency_p50  = find(r"percentile\(50%\)\s*=\s*([\d.]+)\s*ms")
-    latency_p95  = find(r"percentile\(95%\)\s*=\s*([\d.]+)\s*ms")
-    throughput   = find(r"Throughput:\s*([\d.]+)\s*qps")
-    gpu_memory   = find(r"(?:GPU Compute Memory|GPU Memory).*?:\s*([\d.]+)\s*MiB")
+        return float(m.group(1)) if m else None
 
     return {
-        "latency_p50_ms": float(latency_p50) if latency_p50 != "N/A" else None,
-        "latency_p95_ms": float(latency_p95) if latency_p95 != "N/A" else None,
-        "throughput_fps": float(throughput)   if throughput  != "N/A" else None,
-        "gpu_memory_mb":  float(gpu_memory)   if gpu_memory  != "N/A" else None,
+        "p50": find(r"percentile\(50%\)\s*=\s*([\d.]+)\s*ms"),
+        "p95": find(r"percentile\(95%\)\s*=\s*([\d.]+)\s*ms"),
+        "fps": find(r"Throughput:\s*([\d.]+)\s*qps"),
+        "mem": find(r"(?:GPU Compute Memory|GPU Memory).*?:\s*([\d.]+)\s*MiB"),
     }
 
 
-def run_map(weights_path) -> dict:
-    """Evaluate mAP using Ultralytics val().
+def run_trtexec_repeated(engine_path: Path) -> dict:
+    """N_RUNS independent trtexec runs → median and std across runs."""
+    runs = []
+    for i in range(N_RUNS):
+        r = run_trtexec_once(engine_path)
+        if r["p50"] is not None:
+            runs.append(r)
+            print(f"    run {i + 1}/{N_RUNS}: "
+                  f"P50={r['p50']:.3f} ms  fps={r['fps']:.1f}")
+        else:
+            print(f"    run {i + 1}/{N_RUNS}: parse failure")
+    if not runs:
+        return {k: None for k in
+                ("latency_p50_ms", "latency_p50_std_ms", "latency_p95_ms",
+                 "throughput_fps", "throughput_std_fps", "gpu_memory_mb")}
 
-    Accepts:
-      - None              → skip (returns None for both metrics)
-      - relative path     → resolved against script directory
-      - absolute path     → used as-is
-      - bare model name   → e.g. "yolov8x.pt"; let Ultralytics find/download it
-        (pretrained COCO weights: mAP is person-class only; label accordingly)
+    p50s = [r["p50"] for r in runs]
+    fps  = [r["fps"] for r in runs if r["fps"] is not None]
+    return {
+        "latency_p50_ms":     round(statistics.median(p50s), 4),
+        "latency_p50_std_ms": round(statistics.stdev(p50s), 4) if len(p50s) > 1 else 0.0,
+        "latency_p95_ms":     round(statistics.median(
+                                  [r["p95"] for r in runs if r["p95"]]), 4),
+        "throughput_fps":     round(statistics.median(fps), 2) if fps else None,
+        "throughput_std_fps": round(statistics.stdev(fps), 2) if len(fps) > 1 else 0.0,
+        "gpu_memory_mb":      next((r["mem"] for r in runs if r["mem"]), None),
+    }
+
+
+def run_map_on_engine(engine_path: Path) -> dict:
     """
-    if weights_path is None:
-        return {"map50": None, "map50_95": None}
-
-    base_dir  = Path(__file__).parent
-    is_bare   = "/" not in weights_path and "\\" not in weights_path
-    full_path = (
-        base_dir / weights_path
-        if not Path(weights_path).is_absolute() and not is_bare
-        else Path(weights_path)
-    )
-
-    if is_bare:
-        print(f"  Loading pretrained model: {weights_path} (mAP = person class only)")
-        model = YOLO(weights_path)
-    elif full_path.exists():
-        model = YOLO(str(full_path))
-    else:
-        print(f"  WARNING: weights not found at {full_path}, skipping mAP.")
-        return {"map50": None, "map50_95": None}
-
+    Validate the compiled TRT engine itself (NOT the .pt weights) on the
+    full validation split.  This is the deployment-accuracy number.
+    """
     try:
+        model = YOLO(str(engine_path), task="detect")
         metrics = model.val(data=str(DATA_YAML), imgsz=IMGSZ, batch=1,
                             device=0, verbose=False)
         return {
@@ -116,53 +140,43 @@ def run_map(weights_path) -> dict:
             "map50_95": round(float(metrics.box.map), 4),
         }
     except Exception as exc:
-        print(f"  WARNING: mAP evaluation failed ({exc}). Skipping.")
+        print(f"  WARNING: engine mAP evaluation failed ({exc}).")
         return {"map50": None, "map50_95": None}
 
 
-def model_size_mb(engine_path: Path) -> float:
-    return round(engine_path.stat().st_size / 1024 / 1024, 2) if engine_path.exists() else None
-
-
 def main():
+    record_environment()
     rows = []
 
-    for label, engine_file, weights in CONDITIONS:
+    for label, engine_file in CONDITIONS:
         engine_path = ENGINES_DIR / engine_file
         if not engine_path.exists():
             print(f"SKIP: {label} — engine not found ({engine_path})")
             continue
 
-        print(f"\n{'='*60}")
-        print(f"Benchmarking: {label}")
+        print(f"\n{'=' * 60}\nBenchmarking: {label}")
 
-        print("  Running trtexec...")
-        trt_metrics = run_trtexec(engine_path)
+        print(f"  trtexec x {N_RUNS} …")
+        trt_metrics = run_trtexec_repeated(engine_path)
 
-        print("  Evaluating mAP...")
-        map_metrics = run_map(weights)
-
-        size = model_size_mb(engine_path)
+        print("  Engine mAP on full validation split …")
+        map_metrics = run_map_on_engine(engine_path)
 
         row = {
-            "condition":      label,
-            "engine_file":    engine_file,
-            "map50":          map_metrics["map50"],
-            "map50_95":       map_metrics["map50_95"],
-            "latency_p50_ms": trt_metrics["latency_p50_ms"],
-            "latency_p95_ms": trt_metrics["latency_p95_ms"],
-            "throughput_fps": trt_metrics["throughput_fps"],
-            "gpu_memory_mb":  trt_metrics["gpu_memory_mb"],
-            "model_size_mb":  size,
+            "condition":   label,
+            "engine_file": engine_file,
+            **map_metrics,
+            **trt_metrics,
+            "model_size_mb": round(engine_path.stat().st_size / 1024 / 1024, 2),
         }
         rows.append(row)
-
         print(f"  mAP50={row['map50']}  mAP50-95={row['map50_95']}  "
-              f"P50={row['latency_p50_ms']}ms  FPS={row['throughput_fps']}  "
-              f"Mem={row['gpu_memory_mb']}MB  Size={row['model_size_mb']}MB")
+              f"P50={row['latency_p50_ms']}±{row['latency_p50_std_ms']}ms  "
+              f"FPS={row['throughput_fps']}±{row['throughput_std_fps']}")
 
     fieldnames = ["condition", "engine_file", "map50", "map50_95",
-                  "latency_p50_ms", "latency_p95_ms", "throughput_fps",
+                  "latency_p50_ms", "latency_p50_std_ms", "latency_p95_ms",
+                  "throughput_fps", "throughput_std_fps",
                   "gpu_memory_mb", "model_size_mb"]
     with open(OUT_CSV, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)

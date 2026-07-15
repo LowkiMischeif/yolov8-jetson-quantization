@@ -27,9 +27,10 @@ from pathlib import Path
 
 RESULTS_DIR = Path(__file__).parent / "results"
 
-SENSITIVITY_CSV    = RESULTS_DIR / "layer_sensitivity.csv"
-JETSON_LATENCY_CSV = RESULTS_DIR / "layer_latency_jetson.csv"
-PROXY_LATENCY_CSV  = RESULTS_DIR / "layer_latency_proxy.csv"
+SENSITIVITY_CSV      = RESULTS_DIR / "layer_sensitivity.csv"
+MEASURED_LATENCY_CSV = RESULTS_DIR / "layer_latency_measured.csv"   # from 03c
+JETSON_LATENCY_CSV   = RESULTS_DIR / "layer_latency_jetson.csv"
+PROXY_LATENCY_CSV    = RESULTS_DIR / "layer_latency_proxy.csv"
 
 BUDGETS = {
     "tight":   0.60,
@@ -37,8 +38,10 @@ BUDGETS = {
     "relaxed": 0.90,
 }
 
-# INT8 layers run ~50% faster than FP16 on Jetson TensorRT (conservative estimate).
-# Replace with measured values once Jetson profile is available.
+# Last-resort INT8/FP16 latency ratio, used ONLY when no measured per-layer
+# INT8 latency (03c_int8_latency_trtexec.py) is available.  The datasheet
+# 2x TOPS ratio (alpha = 0.5) is a peak-throughput figure that overestimates
+# realised speedup on memory-bound layers.
 INT8_SPEEDUP = 0.50
 
 
@@ -58,11 +61,20 @@ def main():
         for r in load_csv(SENSITIVITY_CSV)
     }
 
-    # Load latency — prefer real Jetson measurements
-    if JETSON_LATENCY_CSV.exists():
+    # Load latency — prefer measured per-layer FP16+INT8 (trtexec, 03c),
+    # then PyTorch CUDA-event Jetson FP16 with the alpha estimate, then proxy.
+    if MEASURED_LATENCY_CSV.exists():
+        latency_rows = load_csv(MEASURED_LATENCY_CSV)
+        source = "trtexec_measured"
+        n_meas = sum(1 for r in latency_rows if r.get("source") == "trtexec_measured")
+        print(f"Using measured per-layer FP16/INT8 latency "
+              f"({n_meas}/{len(latency_rows)} directly measured).")
+    elif JETSON_LATENCY_CSV.exists():
         latency_rows = load_csv(JETSON_LATENCY_CSV)
-        source = "jetson"
-        print("Using real Jetson latency profile.")
+        source = "jetson_alpha_estimate"
+        print(f"WARNING: no measured INT8 latency (run 06_jetson_profile.sh + "
+              f"03c_int8_latency_trtexec.py); estimating INT8 as "
+              f"{1 - INT8_SPEEDUP:.2f} x FP16.")
     elif PROXY_LATENCY_CSV.exists():
         latency_rows = load_csv(PROXY_LATENCY_CSV)
         source = "proxy"
@@ -76,8 +88,12 @@ def main():
     layers = []
     for row in latency_rows:
         name = row["layer_name"]
-        lat_fp16 = float(row["latency_ms"])
-        lat_int8 = lat_fp16 * (1 - INT8_SPEEDUP)
+        if source == "trtexec_measured":
+            lat_fp16 = float(row["lat_fp16_ms"])
+            lat_int8 = float(row["lat_int8_ms"])
+        else:
+            lat_fp16 = float(row["latency_ms"])
+            lat_int8 = lat_fp16 * (1 - INT8_SPEEDUP)
         savings  = lat_fp16 - lat_int8
         sens     = sensitivity.get(name, 0.0)
 

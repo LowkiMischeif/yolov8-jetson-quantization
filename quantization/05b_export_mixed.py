@@ -33,7 +33,13 @@ ENGINES_DIR = Path(__file__).parent / "runs" / "engines"
 CALIB_DIR   = Path(__file__).parent / "runs" / "calibration_images"
 RESULTS_DIR = Path(__file__).parent / "results"
 IMGSZ       = 640
-BUDGETS     = ["tight", "medium", "relaxed"]
+# Proposed method plus baseline assignment variants (04b): every
+# results/assignment_<name>.json found is built into an engine.
+BUDGETS     = [
+    "tight", "medium", "relaxed",
+    "hawq_tight", "hawq_medium", "hawq_relaxed",
+    "flopsproxy_tight", "flopsproxy_medium", "flopsproxy_relaxed",
+]
 
 
 # ── ONNX export ───────────────────────────────────────────────────────────────
@@ -52,20 +58,59 @@ def ensure_onnx():
 
 # ── Layer name mapping ────────────────────────────────────────────────────────
 
-def py_name_to_trt_prefix(pytorch_name: str) -> str:
+def trt_conv_name_to_py_name(trt_name: str) -> str:
     """
-    PyTorch named_modules() path → ONNX/TRT node name prefix.
+    ONNX/TRT Conv node name → PyTorch named_modules() dotted path.
 
-    ONNX keeps dots before numeric indices but replaces dots before
-    alphabetic segments with slashes:
-      'model.0.conv'     →  '/model.0/conv'
-      'model.22.cv2.0.2' →  '/model.22/cv2.0.2'
+    Ultralytics ONNX export names every module level as its own path segment,
+    and a child segment repeats its parent's scope within nn.Sequential /
+    nn.ModuleList containers:
+      '/model.0/conv/Conv'              → 'model.0.conv'
+      '/model.22/cv2.0/cv2.0.2/Conv'    → 'model.22.cv2.0.2'
+      '/model.22/cv2.2/cv2.2.0/conv/Conv' → 'model.22.cv2.2.0.conv'
 
-    TRT layer names append the op type ('/Conv') so we match on substring.
+    We therefore normalise by (1) stripping the trailing op segment ('Conv'),
+    (2) collapsing any segment that extends the previous segment's dotted
+    path, and (3) joining with dots.  This is exact-match safe (verified
+    64/64 against Ultralytics 8.4 opset-17 export; run with --verify to
+    re-check after any Ultralytics/opset upgrade).
     """
-    import re
-    result = re.sub(r'\.(?=[a-zA-Z])', '/', pytorch_name)
-    return '/' + result
+    name = trt_name.split(" + ")[0]           # defensive: drop fusion suffixes
+    parts = [p for p in name.split("/") if p]
+    if parts and parts[-1] == "Conv":
+        parts = parts[:-1]
+    merged: list = []
+    for seg in parts:
+        if merged and seg.startswith(merged[-1] + "."):
+            merged[-1] = seg                  # child repeats parent scope
+        else:
+            merged.append(seg)
+    return ".".join(merged)
+
+
+def verify_matching_against_onnx(assignment_names: set) -> None:
+    """
+    Workstation-side check (no TensorRT needed): parse the ONNX graph and
+    assert that every Conv node maps 1:1 onto the assignment's PyTorch names.
+    Raises RuntimeError on any mismatch instead of silently falling back.
+    """
+    import onnx
+
+    graph = onnx.load(str(ONNX_PATH)).graph
+    onnx_convs = {trt_conv_name_to_py_name(n.name)
+                  for n in graph.node if n.op_type == "Conv"}
+
+    missing = sorted(assignment_names - onnx_convs)
+    extra   = sorted(onnx_convs - assignment_names)
+    if missing or extra:
+        raise RuntimeError(
+            "ONNX↔PyTorch Conv name mapping is NOT bijective.\n"
+            f"  assignment names with no ONNX match ({len(missing)}): {missing[:5]} …\n"
+            f"  ONNX convs with no assignment entry ({len(extra)}): {extra[:5]} …\n"
+            "Refusing to build a mixed-precision engine with unmatched layers."
+        )
+    print(f"  Verified: {len(onnx_convs)}/{len(assignment_names)} Conv layers "
+          "map bijectively between ONNX graph and assignment JSON.")
 
 
 # ── INT8 calibrator factory (TRT 10 requires explicit inheritance) ────────────
@@ -145,26 +190,23 @@ def build_mixed_engine(assignment: dict, budget_name: str) -> Path:
     # PREFER: TRT may override individual layers if the target precision is unsupported.
     config.set_flag(trt.BuilderFlag.PREFER_PRECISION_CONSTRAINTS)
 
-    # Build prefix → precision lookup from assignment JSON
-    prefix_to_prec = {
-        py_name_to_trt_prefix(k): v for k, v in assignment.items()
-    }
-
-    # Debug: show first 8 TRT layer names to verify prefix matching
-    print("  Sample TRT layer names:")
-    for i in range(min(8, network.num_layers)):
-        print(f"    [{i}] {network.get_layer(i).name}")
-
-    n_fp16 = n_int8 = n_unmatched = 0
+    n_fp16 = n_int8 = n_auto = 0
+    matched: set = set()
     for i in range(network.num_layers):
-        layer    = network.get_layer(i)
-        trt_name = layer.name
-        precision = None
+        layer = network.get_layer(i)
+        if layer.type != trt.LayerType.CONVOLUTION:
+            n_auto += 1            # non-Conv operators: TRT automatic precision
+            continue
 
-        for prefix, prec in prefix_to_prec.items():
-            if prefix in trt_name:
-                precision = prec
-                break
+        py_name   = trt_conv_name_to_py_name(layer.name)
+        precision = assignment.get(py_name)
+        if precision is None:
+            raise RuntimeError(
+                f"Conv layer '{layer.name}' (normalised '{py_name}') has no "
+                "entry in the assignment JSON — mapping is broken, aborting "
+                "instead of silently falling back to TRT auto precision."
+            )
+        matched.add(py_name)
 
         if precision == "FP16":
             layer.precision = trt.DataType.HALF
@@ -177,12 +219,17 @@ def build_mixed_engine(assignment: dict, budget_name: str) -> Path:
                 layer.set_output_type(j, trt.DataType.HALF)
             n_int8 += 1
         else:
-            n_unmatched += 1
+            raise ValueError(f"Unknown precision '{precision}' for {py_name}")
 
+    unmatched = set(assignment) - matched
+    if unmatched:
+        raise RuntimeError(
+            f"{len(unmatched)} assignment layers were never seen in the TRT "
+            f"network: {sorted(unmatched)[:5]} … — aborting."
+        )
     print(f"  Layer assignments — FP16: {n_fp16}  INT8: {n_int8}  "
-          f"TRT-auto (non-Conv): {n_unmatched}")
-    if n_fp16 == 0 and n_int8 == 0:
-        print("  WARNING: No layers matched. Check TRT layer names above vs assignment keys.")
+          f"TRT-auto (non-Conv): {n_auto}  "
+          f"[matched {len(matched)}/{len(assignment)} Conv2d]")
 
     # Calibrator required for INT8 layers
     calib_imgs = sorted(CALIB_DIR.glob("*.jpg")) + sorted(CALIB_DIR.glob("*.png"))
@@ -203,20 +250,59 @@ def build_mixed_engine(assignment: dict, budget_name: str) -> Path:
 
     size_mb = out_path.stat().st_size / 1024 / 1024
     print(f"  Saved: {out_path}  ({size_mb:.1f} MB)")
+
+    dump_engine_precisions(serialized, budget_name)
     return out_path
+
+
+def dump_engine_precisions(serialized, budget_name: str) -> None:
+    """
+    Deserialize the freshly built engine and record the *realised* per-layer
+    precisions via IEngineInspector — deployment-side proof that the requested
+    mixed-precision constraints were honoured (or where TRT overrode them
+    under PREFER_PRECISION_CONSTRAINTS).
+    """
+    import tensorrt as trt
+
+    logger  = trt.Logger(trt.Logger.WARNING)
+    runtime = trt.Runtime(logger)
+    engine  = runtime.deserialize_cuda_engine(bytes(serialized))
+    if engine is None:
+        print("  WARNING: could not deserialize engine for inspection.")
+        return
+
+    inspector = engine.create_engine_inspector()
+    info = json.loads(
+        inspector.get_engine_information(trt.LayerInformationFormat.JSON)
+    )
+    out_path = RESULTS_DIR / f"engine_inspect_{budget_name}.json"
+    with open(out_path, "w") as f:
+        json.dump(info, f, indent=2)
+
+    counts: dict = {}
+    for layer in info.get("Layers", []):
+        prec = (layer.get("Precision")
+                or layer.get("LayerType", "?")) if isinstance(layer, dict) else "?"
+        counts[prec] = counts.get(prec, 0) + 1
+    print(f"  Engine inspector precision histogram: {counts}")
+    print(f"  Full per-layer report: {out_path}")
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
-    if not WEIGHTS.exists():
+    import sys
+    verify_only = "--verify" in sys.argv
+
+    if not WEIGHTS.exists() and not verify_only:
         raise FileNotFoundError(
             f"Weights not found at {WEIGHTS}. "
             "Transfer best.pt from workstation and run 05_export.py first."
         )
 
     ENGINES_DIR.mkdir(parents=True, exist_ok=True)
-    ensure_onnx()
+    if not verify_only:
+        ensure_onnx()
 
     built = []
     for budget in BUDGETS:
@@ -227,6 +313,13 @@ def main():
 
         with open(json_path) as f:
             assignment = json.load(f)
+
+        # Fail fast if the ONNX↔PyTorch name mapping is broken (workstation-
+        # checkable: `python 05b_export_mixed.py --verify` needs no TensorRT).
+        verify_matching_against_onnx(set(assignment.keys()))
+        if verify_only:
+            print(f"  [{budget}] mapping OK — verify-only mode, skipping build.")
+            continue
 
         fp16_count = sum(1 for v in assignment.values() if v == "FP16")
         int8_count = sum(1 for v in assignment.values() if v == "INT8")
