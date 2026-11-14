@@ -1,6 +1,12 @@
 # Latency-Profile-Guided Mixed-Precision Quantization for Real-Time Person Detection on the NVIDIA Jetson Orin Nano Super
 
-Code and results for a latency-profile-guided **mixed-precision quantization** framework for YOLOv8 person detection on the NVIDIA Jetson Orin Nano Super. Instead of uniform INT8 post-training quantization (PTQ), each `Conv2d` layer is assigned INT8 or FP16 using two empirical signals — per-layer on-device latency and per-layer mAP sensitivity to INT8 — combined via a greedy knapsack assignment under a target latency budget.
+Code and results for the paper, accepted at **IEEE ISAIA 2026** (International Conference on Intelligent Systems and Interdisciplinary Applications, Oct. 9–10, 2026).
+
+**Headline result:** recovers 98% of the 8.2 pp mAP50-95 lost by uniform INT8 while running faster than FP16 (3.77 vs 3.93 ms, ~286 FPS) on the Jetson Orin Nano Super.
+
+![Accuracy vs latency Pareto plot](quantization/results/figures/pareto_plot.png)
+
+A latency-profile-guided **mixed-precision quantization** framework for YOLOv8 person detection on the NVIDIA Jetson Orin Nano Super. Instead of uniform INT8 post-training quantization (PTQ), each `Conv2d` layer is assigned INT8 or FP16 using two empirical signals — per-layer on-device latency and per-layer mAP sensitivity to INT8 — combined via a greedy knapsack assignment under a target latency budget.
 
 ## Dataset
 
@@ -32,12 +38,22 @@ Precomputed metrics and figures are tracked under [`quantization/results/`](quan
 - `assignment_{tight,medium,relaxed}.json` — precision maps at three latency budgets
 - `figures/` — sensitivity/latency heatmaps, assignment map, Pareto plot
 
-The full write-up is included as the PDF in `quantization/`.
 
 ## Setup
 
 ```bash
 pip install -r quantization/requirements.txt
+```
+
+## Citation
+
+```bibtex
+@inproceedings{ferreira2026latency,
+  author    = {Tyler Ferreira},
+  title     = {Latency-Profile-Guided Mixed-Precision Quantization for Real-Time Person Detection on the {NVIDIA} {Jetson} {Orin} {Nano} {Super}},
+  booktitle = {Proc. IEEE International Conference on Intelligent Systems and Interdisciplinary Applications (ISAIA)},
+  year      = {2026}
+}
 ```
 
 ## License
