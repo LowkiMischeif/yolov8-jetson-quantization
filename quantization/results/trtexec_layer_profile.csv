@@ -1,0 +1,173 @@
+layer_idx,layer_name,in_channels,out_channels,kernel_size,input_h,input_w,latency_ms,time_pct,source
+195,Reformatting CopyNode for Input Tensor 0 to /model.0/conv/Conv,,,,,,0.1661,2.6,jetson_trtexec
+196,/model.0/conv/Conv,,,,,,0.1684,2.6,jetson_trtexec
+197,"PWN(PWN(/model.0/act/Sigmoid), PWN(/model.0/act/Mul))",,,,,,0.1425,2.2,jetson_trtexec
+198,/model.1/conv/Conv,,,,,,0.1691,2.6,jetson_trtexec
+199,"PWN(PWN(/model.1/act/Sigmoid), PWN(/model.1/act/Mul))",,,,,,0.0736,1.1,jetson_trtexec
+200,/model.2/cv1/conv/Conv,,,,,,0.0829,1.3,jetson_trtexec
+201,"PWN(PWN(/model.2/cv1/act/Sigmoid), PWN(/model.2/cv1/act/Mul))",,,,,,0.074,1.1,jetson_trtexec
+202,/model.2/m.0/cv1/conv/Conv,,,,,,0.0963,1.5,jetson_trtexec
+203,"PWN(PWN(/model.2/m.0/cv1/act/Sigmoid), PWN(/model.2/m.0/cv1/act/Mul))",,,,,,0.0403,0.6,jetson_trtexec
+204,/model.2/m.0/cv2/conv/Conv,,,,,,0.0908,1.4,jetson_trtexec
+205,"PWN(PWN(PWN(/model.2/m.0/cv2/act/Sigmoid), PWN(/model.2/m.0/cv2/act/Mul)), PWN(/model.2/m.0/Add))",,,,,,0.0794,1.2,jetson_trtexec
+206,/model.2/Split_output_0 copy,,,,,,0.0767,1.2,jetson_trtexec
+207,/model.2/Split_output_1 copy,,,,,,0.076,1.2,jetson_trtexec
+208,/model.2/cv2/conv/Conv,,,,,,0.0992,1.5,jetson_trtexec
+209,"PWN(PWN(/model.2/cv2/act/Sigmoid), PWN(/model.2/cv2/act/Mul))",,,,,,0.0732,1.1,jetson_trtexec
+210,/model.3/conv/Conv,,,,,,0.1061,1.6,jetson_trtexec
+211,"PWN(PWN(/model.3/act/Sigmoid), PWN(/model.3/act/Mul))",,,,,,0.0394,0.6,jetson_trtexec
+212,/model.4/cv1/conv/Conv,,,,,,0.0606,0.9,jetson_trtexec
+213,"PWN(PWN(/model.4/cv1/act/Sigmoid), PWN(/model.4/cv1/act/Mul))",,,,,,0.0375,0.6,jetson_trtexec
+214,Reformatting CopyNode for Input Tensor 0 to /model.4/m.0/cv1/conv/Conv,,,,,,0.0179,0.3,jetson_trtexec
+215,/model.4/m.0/cv1/conv/Conv,,,,,,0.0713,1.1,jetson_trtexec
+216,"PWN(PWN(/model.4/m.0/cv1/act/Sigmoid), PWN(/model.4/m.0/cv1/act/Mul))",,,,,,0.0155,0.2,jetson_trtexec
+217,/model.4/m.0/cv2/conv/Conv,,,,,,0.0705,1.1,jetson_trtexec
+218,"Reformatting CopyNode for Input Tensor 1 to PWN(PWN(PWN(/model.4/m.0/cv2/act/Sigmoid), PWN(/model.4/m.0/cv2/act/Mul)), PWN(/model.4/m.0/Add))",,,,,,0.0272,0.4,jetson_trtexec
+219,"PWN(PWN(PWN(/model.4/m.0/cv2/act/Sigmoid), PWN(/model.4/m.0/cv2/act/Mul)), PWN(/model.4/m.0/Add))",,,,,,0.0275,0.4,jetson_trtexec
+220,/model.4/m.1/cv1/conv/Conv,,,,,,0.0707,1.1,jetson_trtexec
+221,"PWN(PWN(/model.4/m.1/cv1/act/Sigmoid), PWN(/model.4/m.1/cv1/act/Mul))",,,,,,0.0151,0.2,jetson_trtexec
+222,/model.4/m.1/cv2/conv/Conv,,,,,,0.071,1.1,jetson_trtexec
+223,"PWN(PWN(PWN(/model.4/m.1/cv2/act/Sigmoid), PWN(/model.4/m.1/cv2/act/Mul)), PWN(/model.4/m.1/Add))",,,,,,0.041,0.6,jetson_trtexec
+224,/model.4/Split_output_0 copy,,,,,,0.0268,0.4,jetson_trtexec
+225,/model.4/Split_output_1 copy,,,,,,0.0279,0.4,jetson_trtexec
+226,/model.4/m.0/Add_output_0 copy,,,,,,0.0362,0.6,jetson_trtexec
+227,/model.4/cv2/conv/Conv,,,,,,0.0711,1.1,jetson_trtexec
+228,"PWN(PWN(/model.4/cv2/act/Sigmoid), PWN(/model.4/cv2/act/Mul))",,,,,,0.0402,0.6,jetson_trtexec
+229,/model.5/conv/Conv,,,,,,0.0592,0.9,jetson_trtexec
+230,"PWN(PWN(/model.5/act/Sigmoid), PWN(/model.5/act/Mul))",,,,,,0.0156,0.2,jetson_trtexec
+231,/model.6/cv1/conv/Conv,,,,,,0.0298,0.5,jetson_trtexec
+232,"PWN(PWN(/model.6/cv1/act/Sigmoid), PWN(/model.6/cv1/act/Mul))",,,,,,0.0154,0.2,jetson_trtexec
+233,Reformatting CopyNode for Input Tensor 0 to /model.6/m.0/cv1/conv/Conv,,,,,,0.0116,0.2,jetson_trtexec
+234,/model.6/m.0/cv1/conv/Conv,,,,,,0.0431,0.7,jetson_trtexec
+235,"PWN(PWN(/model.6/m.0/cv1/act/Sigmoid), PWN(/model.6/m.0/cv1/act/Mul))",,,,,,0.0108,0.2,jetson_trtexec
+236,/model.6/m.0/cv2/conv/Conv,,,,,,0.0419,0.6,jetson_trtexec
+237,"Reformatting CopyNode for Input Tensor 1 to PWN(PWN(PWN(/model.6/m.0/cv2/act/Sigmoid), PWN(/model.6/m.0/cv2/act/Mul)), PWN(/model.6/m.0/Add))",,,,,,0.0122,0.2,jetson_trtexec
+238,"PWN(PWN(PWN(/model.6/m.0/cv2/act/Sigmoid), PWN(/model.6/m.0/cv2/act/Mul)), PWN(/model.6/m.0/Add))",,,,,,0.0124,0.2,jetson_trtexec
+239,/model.6/m.1/cv1/conv/Conv,,,,,,0.0399,0.6,jetson_trtexec
+240,"PWN(PWN(/model.6/m.1/cv1/act/Sigmoid), PWN(/model.6/m.1/cv1/act/Mul))",,,,,,0.0104,0.2,jetson_trtexec
+241,/model.6/m.1/cv2/conv/Conv,,,,,,0.041,0.6,jetson_trtexec
+242,"PWN(PWN(PWN(/model.6/m.1/cv2/act/Sigmoid), PWN(/model.6/m.1/cv2/act/Mul)), PWN(/model.6/m.1/Add))",,,,,,0.0163,0.3,jetson_trtexec
+243,/model.6/Split_output_0 copy,,,,,,0.0155,0.2,jetson_trtexec
+244,/model.6/Split_output_1 copy,,,,,,0.0163,0.3,jetson_trtexec
+245,/model.6/m.0/Add_output_0 copy,,,,,,0.0219,0.3,jetson_trtexec
+246,/model.6/cv2/conv/Conv,,,,,,0.0426,0.7,jetson_trtexec
+247,"PWN(PWN(/model.6/cv2/act/Sigmoid), PWN(/model.6/cv2/act/Mul))",,,,,,0.018,0.3,jetson_trtexec
+248,/model.7/conv/Conv,,,,,,0.059,0.9,jetson_trtexec
+249,"PWN(PWN(/model.7/act/Sigmoid), PWN(/model.7/act/Mul))",,,,,,0.0112,0.2,jetson_trtexec
+250,/model.8/cv1/conv/Conv,,,,,,0.0258,0.4,jetson_trtexec
+251,"PWN(PWN(/model.8/cv1/act/Sigmoid), PWN(/model.8/cv1/act/Mul))",,,,,,0.0105,0.2,jetson_trtexec
+252,/model.8/m.0/cv1/conv/Conv,,,,,,0.0413,0.6,jetson_trtexec
+253,"PWN(PWN(/model.8/m.0/cv1/act/Sigmoid), PWN(/model.8/m.0/cv1/act/Mul))",,,,,,0.0083,0.1,jetson_trtexec
+254,/model.8/m.0/cv2/conv/Conv,,,,,,0.0404,0.6,jetson_trtexec
+255,"PWN(PWN(PWN(/model.8/m.0/cv2/act/Sigmoid), PWN(/model.8/m.0/cv2/act/Mul)), PWN(/model.8/m.0/Add))",,,,,,0.012,0.2,jetson_trtexec
+256,/model.8/Split_output_0 copy,,,,,,0.0157,0.2,jetson_trtexec
+257,/model.8/Split_output_1 copy,,,,,,0.0148,0.2,jetson_trtexec
+258,/model.8/cv2/conv/Conv,,,,,,0.0306,0.5,jetson_trtexec
+259,"PWN(PWN(/model.8/cv2/act/Sigmoid), PWN(/model.8/cv2/act/Mul))",,,,,,0.011,0.2,jetson_trtexec
+260,/model.9/cv1/conv/Conv,,,,,,0.0185,0.3,jetson_trtexec
+261,/model.9/m/MaxPool,,,,,,0.0274,0.4,jetson_trtexec
+262,/model.9/m_1/MaxPool,,,,,,0.0268,0.4,jetson_trtexec
+263,/model.9/m_2/MaxPool,,,,,,0.0268,0.4,jetson_trtexec
+264,/model.9/cv1/conv/Conv_output_0 copy,,,,,,0.0132,0.2,jetson_trtexec
+265,/model.9/m/MaxPool_output_0 copy,,,,,,0.0143,0.2,jetson_trtexec
+266,/model.9/m_1/MaxPool_output_0 copy,,,,,,0.014,0.2,jetson_trtexec
+267,/model.9/cv2/conv/Conv,,,,,,0.038,0.6,jetson_trtexec
+268,"PWN(PWN(/model.9/cv2/act/Sigmoid), PWN(/model.9/cv2/act/Mul))",,,,,,0.0112,0.2,jetson_trtexec
+269,/model.10/Resize,,,,,,0.0333,0.5,jetson_trtexec
+270,/model.10/Resize_output_0 copy,,,,,,0.0387,0.6,jetson_trtexec
+271,/model.12/cv1/conv/Conv,,,,,,0.0493,0.8,jetson_trtexec
+272,"PWN(PWN(/model.12/cv1/act/Sigmoid), PWN(/model.12/cv1/act/Mul))",,,,,,0.0156,0.2,jetson_trtexec
+273,/model.12/m.0/cv1/conv/Conv,,,,,,0.0442,0.7,jetson_trtexec
+274,"PWN(PWN(/model.12/m.0/cv1/act/Sigmoid), PWN(/model.12/m.0/cv1/act/Mul))",,,,,,0.0112,0.2,jetson_trtexec
+275,/model.12/m.0/cv2/conv/Conv,,,,,,0.0429,0.7,jetson_trtexec
+276,"PWN(PWN(/model.12/m.0/cv2/act/Sigmoid), PWN(/model.12/m.0/cv2/act/Mul))",,,,,,0.0115,0.2,jetson_trtexec
+277,/model.12/Split_output_0 copy,,,,,,0.0171,0.3,jetson_trtexec
+278,/model.12/Split_output_1 copy,,,,,,0.0158,0.2,jetson_trtexec
+279,/model.12/cv2/conv/Conv,,,,,,0.0392,0.6,jetson_trtexec
+280,"PWN(PWN(/model.12/cv2/act/Sigmoid), PWN(/model.12/cv2/act/Mul))",,,,,,0.0159,0.2,jetson_trtexec
+281,/model.13/Resize,,,,,,0.0888,1.4,jetson_trtexec
+282,/model.13/Resize_output_0 copy,,,,,,0.0772,1.2,jetson_trtexec
+283,/model.15/cv1/conv/Conv,,,,,,0.0948,1.5,jetson_trtexec
+284,"PWN(PWN(/model.15/cv1/act/Sigmoid), PWN(/model.15/cv1/act/Mul))",,,,,,0.0366,0.6,jetson_trtexec
+285,Reformatting CopyNode for Input Tensor 0 to /model.15/m.0/cv1/conv/Conv,,,,,,0.0171,0.3,jetson_trtexec
+286,/model.15/m.0/cv1/conv/Conv,,,,,,0.0717,1.1,jetson_trtexec
+287,"PWN(PWN(/model.15/m.0/cv1/act/Sigmoid), PWN(/model.15/m.0/cv1/act/Mul))",,,,,,0.0156,0.2,jetson_trtexec
+288,/model.15/m.0/cv2/conv/Conv,,,,,,0.0704,1.1,jetson_trtexec
+289,"PWN(PWN(/model.15/m.0/cv2/act/Sigmoid), PWN(/model.15/m.0/cv2/act/Mul))",,,,,,0.0165,0.3,jetson_trtexec
+290,/model.15/Split_output_0 copy,,,,,,0.0288,0.4,jetson_trtexec
+291,/model.15/Split_output_1 copy,,,,,,0.0281,0.4,jetson_trtexec
+292,/model.15/cv2/conv/Conv,,,,,,0.0627,1.0,jetson_trtexec
+293,"PWN(PWN(/model.15/cv2/act/Sigmoid), PWN(/model.15/cv2/act/Mul))",,,,,,0.0396,0.6,jetson_trtexec
+294,/model.16/conv/Conv,,,,,,0.0415,0.6,jetson_trtexec
+295,/model.22/cv2.0/cv2.0.0/conv/Conv || /model.22/cv3.0/cv3.0.0/conv/Conv,,,,,,0.2036,3.1,jetson_trtexec
+296,"PWN(PWN(/model.16/act/Sigmoid), PWN(/model.16/act/Mul))",,,,,,0.0155,0.2,jetson_trtexec
+297,"PWN(PWN(/model.22/cv2.0/cv2.0.0/act/Sigmoid), PWN(/model.22/cv2.0/cv2.0.0/act/Mul))",,,,,,0.0397,0.6,jetson_trtexec
+298,"PWN(PWN(/model.22/cv3.0/cv3.0.0/act/Sigmoid), PWN(/model.22/cv3.0/cv3.0.0/act/Mul))",,,,,,0.0396,0.6,jetson_trtexec
+299,/model.12/cv2/act/Mul_output_0 copy,,,,,,0.0256,0.4,jetson_trtexec
+300,/model.22/cv2.0/cv2.0.1/conv/Conv,,,,,,0.1566,2.4,jetson_trtexec
+301,/model.22/cv3.0/cv3.0.1/conv/Conv,,,,,,0.1547,2.4,jetson_trtexec
+302,/model.18/cv1/conv/Conv,,,,,,0.0375,0.6,jetson_trtexec
+303,"PWN(PWN(/model.22/cv2.0/cv2.0.1/act/Sigmoid), PWN(/model.22/cv2.0/cv2.0.1/act/Mul))",,,,,,0.0402,0.6,jetson_trtexec
+304,"PWN(PWN(/model.22/cv3.0/cv3.0.1/act/Sigmoid), PWN(/model.22/cv3.0/cv3.0.1/act/Mul))",,,,,,0.0398,0.6,jetson_trtexec
+305,"PWN(PWN(/model.18/cv1/act/Sigmoid), PWN(/model.18/cv1/act/Mul))",,,,,,0.0242,0.4,jetson_trtexec
+306,/model.22/cv2.0/cv2.0.2/Conv,,,,,,0.0612,0.9,jetson_trtexec
+307,/model.22/cv3.0/cv3.0.2/Conv,,,,,,0.0329,0.5,jetson_trtexec
+308,/model.22/Reshape_copy_output,,,,,,0.0379,0.6,jetson_trtexec
+309,/model.22/Reshape_3,,,,,,0.0095,0.1,jetson_trtexec
+310,/model.22/Reshape_3_copy_output,,,,,,0.0065,0.1,jetson_trtexec
+311,Reformatting CopyNode for Input Tensor 0 to /model.18/m.0/cv1/conv/Conv,,,,,,0.0161,0.2,jetson_trtexec
+312,/model.18/m.0/cv1/conv/Conv,,,,,,0.0422,0.6,jetson_trtexec
+313,"PWN(PWN(/model.18/m.0/cv1/act/Sigmoid), PWN(/model.18/m.0/cv1/act/Mul))",,,,,,0.0107,0.2,jetson_trtexec
+314,/model.18/m.0/cv2/conv/Conv,,,,,,0.0411,0.6,jetson_trtexec
+315,"PWN(PWN(/model.18/m.0/cv2/act/Sigmoid), PWN(/model.18/m.0/cv2/act/Mul))",,,,,,0.0111,0.2,jetson_trtexec
+316,/model.18/Split_output_0 copy,,,,,,0.016,0.2,jetson_trtexec
+317,/model.18/Split_output_1 copy,,,,,,0.0158,0.2,jetson_trtexec
+318,/model.18/cv2/conv/Conv,,,,,,0.031,0.5,jetson_trtexec
+319,"PWN(PWN(/model.18/cv2/act/Sigmoid), PWN(/model.18/cv2/act/Mul))",,,,,,0.0156,0.2,jetson_trtexec
+320,/model.19/conv/Conv,,,,,,0.0439,0.7,jetson_trtexec
+321,/model.22/cv2.1/cv2.1.0/conv/Conv || /model.22/cv3.1/cv3.1.0/conv/Conv,,,,,,0.0964,1.5,jetson_trtexec
+322,"PWN(PWN(/model.19/act/Sigmoid), PWN(/model.19/act/Mul))",,,,,,0.0117,0.2,jetson_trtexec
+323,"PWN(PWN(/model.22/cv2.1/cv2.1.0/act/Sigmoid), PWN(/model.22/cv2.1/cv2.1.0/act/Mul))",,,,,,0.011,0.2,jetson_trtexec
+324,"PWN(PWN(/model.22/cv3.1/cv3.1.0/act/Sigmoid), PWN(/model.22/cv3.1/cv3.1.0/act/Mul))",,,,,,0.0118,0.2,jetson_trtexec
+325,/model.9/cv2/act/Mul_output_0 copy,,,,,,0.0175,0.3,jetson_trtexec
+326,/model.22/cv2.1/cv2.1.1/conv/Conv,,,,,,0.0436,0.7,jetson_trtexec
+327,/model.22/cv3.1/cv3.1.1/conv/Conv,,,,,,0.0423,0.7,jetson_trtexec
+328,/model.21/cv1/conv/Conv,,,,,,0.034,0.5,jetson_trtexec
+329,"PWN(PWN(/model.22/cv2.1/cv2.1.1/act/Sigmoid), PWN(/model.22/cv2.1/cv2.1.1/act/Mul))",,,,,,0.0148,0.2,jetson_trtexec
+330,"PWN(PWN(/model.22/cv3.1/cv3.1.1/act/Sigmoid), PWN(/model.22/cv3.1/cv3.1.1/act/Mul))",,,,,,0.0134,0.2,jetson_trtexec
+331,"PWN(PWN(/model.21/cv1/act/Sigmoid), PWN(/model.21/cv1/act/Mul))",,,,,,0.0113,0.2,jetson_trtexec
+332,/model.22/cv2.1/cv2.1.2/Conv,,,,,,0.0193,0.3,jetson_trtexec
+333,/model.22/cv3.1/cv3.1.2/Conv,,,,,,0.014,0.2,jetson_trtexec
+334,/model.22/Reshape_1_copy_output,,,,,,0.0108,0.2,jetson_trtexec
+335,/model.22/Reshape_4_copy_output,,,,,,0.0058,0.1,jetson_trtexec
+336,Reformatting CopyNode for Input Tensor 0 to /model.21/m.0/cv1/conv/Conv,,,,,,0.0103,0.2,jetson_trtexec
+337,/model.21/m.0/cv1/conv/Conv,,,,,,0.0421,0.6,jetson_trtexec
+338,"PWN(PWN(/model.21/m.0/cv1/act/Sigmoid), PWN(/model.21/m.0/cv1/act/Mul))",,,,,,0.0083,0.1,jetson_trtexec
+339,/model.21/m.0/cv2/conv/Conv,,,,,,0.0399,0.6,jetson_trtexec
+340,"PWN(PWN(/model.21/m.0/cv2/act/Sigmoid), PWN(/model.21/m.0/cv2/act/Mul))",,,,,,0.0084,0.1,jetson_trtexec
+341,/model.21/Split_output_0 copy,,,,,,0.0106,0.2,jetson_trtexec
+342,/model.21/Split_output_1 copy,,,,,,0.0101,0.2,jetson_trtexec
+343,/model.21/cv2/conv/Conv,,,,,,0.0311,0.5,jetson_trtexec
+344,"PWN(PWN(/model.21/cv2/act/Sigmoid), PWN(/model.21/cv2/act/Mul))",,,,,,0.0107,0.2,jetson_trtexec
+345,/model.22/cv2.2/cv2.2.0/conv/Conv || /model.22/cv3.2/cv3.2.0/conv/Conv,,,,,,0.0686,1.1,jetson_trtexec
+346,"PWN(PWN(/model.22/cv2.2/cv2.2.0/act/Sigmoid), PWN(/model.22/cv2.2/cv2.2.0/act/Mul))",,,,,,0.0073,0.1,jetson_trtexec
+347,"PWN(PWN(/model.22/cv3.2/cv3.2.0/act/Sigmoid), PWN(/model.22/cv3.2/cv3.2.0/act/Mul))",,,,,,0.0066,0.1,jetson_trtexec
+348,/model.22/cv2.2/cv2.2.1/conv/Conv,,,,,,0.0229,0.4,jetson_trtexec
+349,/model.22/cv3.2/cv3.2.1/conv/Conv,,,,,,0.022,0.3,jetson_trtexec
+350,"PWN(PWN(/model.22/cv2.2/cv2.2.1/act/Sigmoid), PWN(/model.22/cv2.2/cv2.2.1/act/Mul))",,,,,,0.0071,0.1,jetson_trtexec
+351,"PWN(PWN(/model.22/cv3.2/cv3.2.1/act/Sigmoid), PWN(/model.22/cv3.2/cv3.2.1/act/Mul))",,,,,,0.0066,0.1,jetson_trtexec
+352,/model.22/cv2.2/cv2.2.2/Conv,,,,,,0.0136,0.2,jetson_trtexec
+353,/model.22/cv3.2/cv3.2.2/Conv,,,,,,0.0091,0.1,jetson_trtexec
+354,/model.22/Reshape_2_copy_output,,,,,,0.0074,0.1,jetson_trtexec
+355,/model.22/Reshape_5_copy_output,,,,,,0.0057,0.1,jetson_trtexec
+356,/model.22/dfl/Reshape + /model.22/dfl/Transpose,,,,,,0.0808,1.2,jetson_trtexec
+357,PWN(/model.22/Sigmoid),,,,,,0.008,0.1,jetson_trtexec
+358,/model.22/dfl/Softmax,,,,,,0.064,1.0,jetson_trtexec
+359,/model.22/dfl/conv/Conv,,,,,,0.0751,1.2,jetson_trtexec
+360,PWN(/model.22/Sub),,,,,,0.0084,0.1,jetson_trtexec
+361,PWN(/model.22/Add_1),,,,,,0.0076,0.1,jetson_trtexec
+362,PWN(/model.22/Sub_1),,,,,,0.0065,0.1,jetson_trtexec
+363,"PWN(PWN(/model.22/Add_2), PWN(/model.22/Constant_14_output_0 + ONNXTRT_Broadcast, PWN(/model.22/Div_1)))",,,,,,0.0072,0.1,jetson_trtexec
+364,/model.22/Div_1_output_0 copy,,,,,,0.0066,0.1,jetson_trtexec
+365,PWN(/model.22/Mul_2),,,,,,0.0088,0.1,jetson_trtexec
+366,/model.22/Mul_2_output_0 copy,,,,,,0.0065,0.1,jetson_trtexec

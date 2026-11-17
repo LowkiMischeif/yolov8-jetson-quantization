@@ -1,0 +1,326 @@
+&&&& RUNNING TensorRT.trtexec [TensorRT v100700] [b23] # /usr/src/tensorrt/bin/trtexec --loadEngine=/home/loki/Documents/papers/quantization/runs/engines/yolov8n_int8_ptq.engine --warmUp=500 --iterations=1000 --dumpProfile --separateProfileRun --percentile=50,95
+[07/14/2026-23:21:09] [I] TF32 is enabled by default. Add --noTF32 flag to further improve accuracy with some performance cost.
+[07/14/2026-23:21:09] [I] === Model Options ===
+[07/14/2026-23:21:09] [I] Format: *
+[07/14/2026-23:21:09] [I] Model: 
+[07/14/2026-23:21:09] [I] Output:
+[07/14/2026-23:21:09] [I] 
+[07/14/2026-23:21:09] [I] === System Options ===
+[07/14/2026-23:21:09] [I] Device: 0
+[07/14/2026-23:21:09] [I] DLACore: 
+[07/14/2026-23:21:09] [I] Plugins:
+[07/14/2026-23:21:09] [I] setPluginsToSerialize:
+[07/14/2026-23:21:09] [I] dynamicPlugins:
+[07/14/2026-23:21:09] [I] ignoreParsedPluginLibs: 0
+[07/14/2026-23:21:09] [I] 
+[07/14/2026-23:21:09] [I] === Inference Options ===
+[07/14/2026-23:21:09] [I] Batch: Explicit
+[07/14/2026-23:21:09] [I] Input inference shapes: model
+[07/14/2026-23:21:09] [I] Iterations: 1000
+[07/14/2026-23:21:09] [I] Duration: 3s (+ 500ms warm up)
+[07/14/2026-23:21:09] [I] Sleep time: 0ms
+[07/14/2026-23:21:09] [I] Idle time: 0ms
+[07/14/2026-23:21:09] [I] Inference Streams: 1
+[07/14/2026-23:21:09] [I] ExposeDMA: Disabled
+[07/14/2026-23:21:09] [I] Data transfers: Enabled
+[07/14/2026-23:21:09] [I] Spin-wait: Disabled
+[07/14/2026-23:21:09] [I] Multithreading: Disabled
+[07/14/2026-23:21:09] [I] CUDA Graph: Disabled
+[07/14/2026-23:21:09] [I] Separate profiling: Enabled
+[07/14/2026-23:21:09] [I] Time Deserialize: Disabled
+[07/14/2026-23:21:09] [I] Time Refit: Disabled
+[07/14/2026-23:21:09] [I] NVTX verbosity: 0
+[07/14/2026-23:21:09] [I] Persistent Cache Ratio: 0
+[07/14/2026-23:21:09] [I] Optimization Profile Index: 0
+[07/14/2026-23:21:09] [I] Weight Streaming Budget: 100.000000%
+[07/14/2026-23:21:09] [I] Inputs:
+[07/14/2026-23:21:09] [I] Debug Tensor Save Destinations:
+[07/14/2026-23:21:09] [I] === Reporting Options ===
+[07/14/2026-23:21:09] [I] Verbose: Disabled
+[07/14/2026-23:21:09] [I] Averages: 10 inferences
+[07/14/2026-23:21:09] [I] Percentiles: 50,95
+[07/14/2026-23:21:09] [I] Dump refittable layers:Disabled
+[07/14/2026-23:21:09] [I] Dump output: Disabled
+[07/14/2026-23:21:09] [I] Profile: Enabled
+[07/14/2026-23:21:09] [I] Export timing to JSON file: 
+[07/14/2026-23:21:09] [I] Export output to JSON file: 
+[07/14/2026-23:21:09] [I] Export profile to JSON file: 
+[07/14/2026-23:21:09] [I] 
+[07/14/2026-23:21:09] [I] === Device Information ===
+[07/14/2026-23:21:09] [I] Available Devices: 
+[07/14/2026-23:21:09] [I]   Device 0: "Orin" UUID: GPU-437187cf-9a66-5679-ab04-e9453c96d4e6
+[07/14/2026-23:21:10] [I] Selected Device: Orin
+[07/14/2026-23:21:10] [I] Selected Device ID: 0
+[07/14/2026-23:21:10] [I] Selected Device UUID: GPU-437187cf-9a66-5679-ab04-e9453c96d4e6
+[07/14/2026-23:21:10] [I] Compute Capability: 8.7
+[07/14/2026-23:21:10] [I] SMs: 8
+[07/14/2026-23:21:10] [I] Device Global Memory: 7607 MiB
+[07/14/2026-23:21:10] [I] Shared Memory per SM: 164 KiB
+[07/14/2026-23:21:10] [I] Memory Bus Width: 128 bits (ECC disabled)
+[07/14/2026-23:21:10] [I] Application Compute Clock Rate: 1.02 GHz
+[07/14/2026-23:21:10] [I] Application Memory Clock Rate: 1.02 GHz
+[07/14/2026-23:21:10] [I] 
+[07/14/2026-23:21:10] [I] Note: The application clock rates do not reflect the actual clock rates that the GPU is currently running at.
+[07/14/2026-23:21:10] [I] 
+[07/14/2026-23:21:10] [I] TensorRT version: 10.7.0
+[07/14/2026-23:21:10] [I] Loading standard plugins
+[07/14/2026-23:21:10] [I] [TRT] Loaded engine size: 4 MiB
+[07/14/2026-23:21:10] [I] Engine deserialized in 0.0493617 sec.
+[07/14/2026-23:21:10] [I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +7, now: CPU 0, GPU 10 (MiB)
+[07/14/2026-23:21:10] [I] Setting persistentCacheLimit to 0 bytes.
+[07/14/2026-23:21:10] [I] Created execution context with device memory size: 7.03125 MiB
+[07/14/2026-23:21:10] [I] Using random values for input images
+[07/14/2026-23:21:10] [I] Input binding for images with dimensions 1x3x640x640 is created.
+[07/14/2026-23:21:10] [I] Output binding for output0 with dimensions 1x5x8400 is created.
+[07/14/2026-23:21:10] [I] Starting inference
+[07/14/2026-23:21:13] [I] Warmup completed 154 queries over 500 ms
+[07/14/2026-23:21:13] [I] Timing trace has 1066 queries over 3.00742 s
+[07/14/2026-23:21:13] [I] 
+[07/14/2026-23:21:13] [I] === Trace details ===
+[07/14/2026-23:21:13] [I] Trace averages of 10 runs:
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81823 ms - Host latency: 3.08899 ms (enqueue 0.989078 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81624 ms - Host latency: 3.08262 ms (enqueue 0.98504 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81569 ms - Host latency: 3.08377 ms (enqueue 0.983002 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.8162 ms - Host latency: 3.08229 ms (enqueue 0.988794 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81645 ms - Host latency: 3.08372 ms (enqueue 0.986646 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.8161 ms - Host latency: 3.08336 ms (enqueue 0.986694 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.8143 ms - Host latency: 3.08202 ms (enqueue 0.988708 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81462 ms - Host latency: 3.08063 ms (enqueue 0.989008 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.8145 ms - Host latency: 3.08062 ms (enqueue 0.990009 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81566 ms - Host latency: 3.08225 ms (enqueue 0.98432 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81355 ms - Host latency: 3.07807 ms (enqueue 0.993799 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81421 ms - Host latency: 3.08346 ms (enqueue 0.98645 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81511 ms - Host latency: 3.08442 ms (enqueue 0.978046 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81613 ms - Host latency: 3.08176 ms (enqueue 0.978259 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81616 ms - Host latency: 3.08312 ms (enqueue 0.981348 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81569 ms - Host latency: 3.08422 ms (enqueue 0.983612 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81491 ms - Host latency: 3.08186 ms (enqueue 0.980359 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.8141 ms - Host latency: 3.08022 ms (enqueue 0.988544 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81569 ms - Host latency: 3.08321 ms (enqueue 0.986664 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81378 ms - Host latency: 3.07899 ms (enqueue 0.994775 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81572 ms - Host latency: 3.08071 ms (enqueue 0.98772 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81506 ms - Host latency: 3.08119 ms (enqueue 0.986755 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81614 ms - Host latency: 3.08322 ms (enqueue 0.988684 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81791 ms - Host latency: 3.08529 ms (enqueue 0.994421 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81542 ms - Host latency: 3.08354 ms (enqueue 0.985913 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.8166 ms - Host latency: 3.0842 ms (enqueue 0.985156 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81488 ms - Host latency: 3.08359 ms (enqueue 0.986694 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81578 ms - Host latency: 3.08182 ms (enqueue 0.984851 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81368 ms - Host latency: 3.07998 ms (enqueue 0.988965 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81559 ms - Host latency: 3.08265 ms (enqueue 0.981274 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81783 ms - Host latency: 3.08367 ms (enqueue 0.992517 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81613 ms - Host latency: 3.08285 ms (enqueue 0.98269 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81414 ms - Host latency: 3.07981 ms (enqueue 0.987268 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81401 ms - Host latency: 3.08048 ms (enqueue 0.986853 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81521 ms - Host latency: 3.08378 ms (enqueue 0.985168 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81188 ms - Host latency: 3.07849 ms (enqueue 0.985095 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.8165 ms - Host latency: 3.08047 ms (enqueue 0.991296 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81588 ms - Host latency: 3.08252 ms (enqueue 0.986023 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81473 ms - Host latency: 3.08171 ms (enqueue 0.987451 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81578 ms - Host latency: 3.08469 ms (enqueue 0.987524 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81531 ms - Host latency: 3.08263 ms (enqueue 0.987292 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81752 ms - Host latency: 3.08359 ms (enqueue 0.984583 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81418 ms - Host latency: 3.08126 ms (enqueue 0.985803 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81343 ms - Host latency: 3.08027 ms (enqueue 0.985327 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81528 ms - Host latency: 3.08013 ms (enqueue 0.986401 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81562 ms - Host latency: 3.08511 ms (enqueue 0.985034 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81801 ms - Host latency: 3.08441 ms (enqueue 0.981116 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81727 ms - Host latency: 3.08525 ms (enqueue 0.985583 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81399 ms - Host latency: 3.08411 ms (enqueue 0.982458 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81614 ms - Host latency: 3.08344 ms (enqueue 0.9875 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81545 ms - Host latency: 3.08357 ms (enqueue 0.981836 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81511 ms - Host latency: 3.08324 ms (enqueue 0.982776 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81659 ms - Host latency: 3.08312 ms (enqueue 0.982434 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81547 ms - Host latency: 3.08148 ms (enqueue 0.984668 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81416 ms - Host latency: 3.07909 ms (enqueue 0.9875 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81387 ms - Host latency: 3.07864 ms (enqueue 0.982642 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.8166 ms - Host latency: 3.0845 ms (enqueue 0.979956 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.8157 ms - Host latency: 3.08271 ms (enqueue 0.981445 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.8168 ms - Host latency: 3.08584 ms (enqueue 0.985034 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81772 ms - Host latency: 3.08657 ms (enqueue 0.980298 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.8158 ms - Host latency: 3.08259 ms (enqueue 0.99187 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81621 ms - Host latency: 3.08345 ms (enqueue 0.986548 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81541 ms - Host latency: 3.08333 ms (enqueue 0.983081 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81497 ms - Host latency: 3.08152 ms (enqueue 0.983765 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81465 ms - Host latency: 3.08059 ms (enqueue 0.991211 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81724 ms - Host latency: 3.08713 ms (enqueue 0.98374 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81677 ms - Host latency: 3.08621 ms (enqueue 0.987646 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81599 ms - Host latency: 3.08101 ms (enqueue 0.986694 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81646 ms - Host latency: 3.08423 ms (enqueue 0.983887 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81682 ms - Host latency: 3.08477 ms (enqueue 0.98313 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81658 ms - Host latency: 3.08516 ms (enqueue 0.98396 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81538 ms - Host latency: 3.0822 ms (enqueue 0.985229 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81501 ms - Host latency: 3.08091 ms (enqueue 0.985864 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81699 ms - Host latency: 3.08533 ms (enqueue 0.987476 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81672 ms - Host latency: 3.08567 ms (enqueue 0.989014 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81611 ms - Host latency: 3.08389 ms (enqueue 0.991895 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81638 ms - Host latency: 3.08308 ms (enqueue 0.983325 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81548 ms - Host latency: 3.08362 ms (enqueue 0.982666 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81619 ms - Host latency: 3.08298 ms (enqueue 0.981787 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.8166 ms - Host latency: 3.08591 ms (enqueue 0.983789 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81643 ms - Host latency: 3.08413 ms (enqueue 0.986841 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81638 ms - Host latency: 3.08291 ms (enqueue 0.9854 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81462 ms - Host latency: 3.08091 ms (enqueue 0.984937 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81714 ms - Host latency: 3.08489 ms (enqueue 0.984717 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81775 ms - Host latency: 3.08354 ms (enqueue 0.981665 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81631 ms - Host latency: 3.08457 ms (enqueue 0.988257 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81748 ms - Host latency: 3.08379 ms (enqueue 0.987256 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81484 ms - Host latency: 3.08152 ms (enqueue 0.996631 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81545 ms - Host latency: 3.08093 ms (enqueue 0.994336 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81775 ms - Host latency: 3.08406 ms (enqueue 0.996558 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81541 ms - Host latency: 3.08093 ms (enqueue 0.995337 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81555 ms - Host latency: 3.08418 ms (enqueue 0.996484 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81516 ms - Host latency: 3.08259 ms (enqueue 0.999683 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81628 ms - Host latency: 3.08472 ms (enqueue 0.997534 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81848 ms - Host latency: 3.08584 ms (enqueue 0.997437 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81667 ms - Host latency: 3.08491 ms (enqueue 1.00176 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81738 ms - Host latency: 3.08523 ms (enqueue 0.998291 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81284 ms - Host latency: 3.07998 ms (enqueue 0.996338 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81572 ms - Host latency: 3.08188 ms (enqueue 0.994238 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81663 ms - Host latency: 3.08455 ms (enqueue 1.0011 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81748 ms - Host latency: 3.0832 ms (enqueue 1.00566 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81602 ms - Host latency: 3.08359 ms (enqueue 0.998486 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81626 ms - Host latency: 3.08218 ms (enqueue 0.999976 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81636 ms - Host latency: 3.08398 ms (enqueue 0.991333 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81409 ms - Host latency: 3.08276 ms (enqueue 0.995654 ms)
+[07/14/2026-23:21:13] [I] Average on 10 runs - GPU latency: 2.81494 ms - Host latency: 3.08284 ms (enqueue 0.993701 ms)
+[07/14/2026-23:21:13] [I] 
+[07/14/2026-23:21:13] [I] === Performance summary ===
+[07/14/2026-23:21:13] [I] Throughput: 354.457 qps
+[07/14/2026-23:21:13] [I] Latency: min = 3.04614 ms, max = 3.10718 ms, mean = 3.08289 ms, median = 3.08221 ms, percentile(50%) = 3.08215 ms, percentile(95%) = 3.09473 ms
+[07/14/2026-23:21:13] [I] Enqueue Time: min = 0.963379 ms, max = 1.09131 ms, mean = 0.987901 ms, median = 0.982635 ms, percentile(50%) = 0.982605 ms, percentile(95%) = 1.02319 ms
+[07/14/2026-23:21:13] [I] H2D Latency: min = 0.230469 ms, max = 0.259277 ms, mean = 0.248211 ms, median = 0.248047 ms, percentile(50%) = 0.248047 ms, percentile(95%) = 0.253906 ms
+[07/14/2026-23:21:13] [I] GPU Compute Time: min = 2.78271 ms, max = 2.82788 ms, mean = 2.81573 ms, median = 2.81567 ms, percentile(50%) = 2.81567 ms, percentile(95%) = 2.82178 ms
+[07/14/2026-23:21:13] [I] D2H Latency: min = 0.00952148 ms, max = 0.034668 ms, mean = 0.0189563 ms, median = 0.0172119 ms, percentile(50%) = 0.0172119 ms, percentile(95%) = 0.0296631 ms
+[07/14/2026-23:21:13] [I] Total Host Walltime: 3.00742 s
+[07/14/2026-23:21:13] [I] Total GPU Compute Time: 3.00156 s
+[07/14/2026-23:21:13] [I] Explanations of the performance metrics are printed in the verbose logs.
+[07/14/2026-23:21:13] [I] 
+[07/14/2026-23:21:17] [I] 
+[07/14/2026-23:21:17] [I] === Profile (1157 iterations ) ===
+[07/14/2026-23:21:17] [I]    Time(ms)     Avg.(ms)   Median(ms)   Time(%)   Layer
+[07/14/2026-23:21:17] [I]       85.28       0.0737       0.0737       2.5   Reformatting CopyNode for Input Tensor 0 to /model.0/conv/Conv + PWN(PWN(/model.0/act/Sigmoid), PWN(/model.0/act/Mul))
+[07/14/2026-23:21:17] [I]       89.29       0.0772       0.0772       2.6   /model.0/conv/Conv + PWN(PWN(/model.0/act/Sigmoid), PWN(/model.0/act/Mul))
+[07/14/2026-23:21:17] [I]      111.66       0.0965       0.0965       3.3   /model.1/conv/Conv + PWN(PWN(/model.1/act/Sigmoid), PWN(/model.1/act/Mul))
+[07/14/2026-23:21:17] [I]       43.50       0.0376       0.0376       1.3   /model.2/cv1/conv/Conv + PWN(PWN(/model.2/cv1/act/Sigmoid), PWN(/model.2/cv1/act/Mul))
+[07/14/2026-23:21:17] [I]       26.41       0.0228       0.0228       0.8   Reformatting CopyNode for Output Tensor 0 to /model.2/cv1/conv/Conv + PWN(PWN(/model.2/cv1/act/Sigmoid), PWN(/model.2/cv1/act/Mul))
+[07/14/2026-23:21:17] [I]       98.06       0.0848       0.0847       2.9   /model.2/m.0/cv1/conv/Conv
+[07/14/2026-23:21:17] [I]       40.18       0.0347       0.0347       1.2   PWN(PWN(/model.2/m.0/cv1/act/Sigmoid), PWN(/model.2/m.0/cv1/act/Mul))
+[07/14/2026-23:21:17] [I]       74.26       0.0642       0.0642       2.2   /model.2/m.0/cv2/conv/Conv
+[07/14/2026-23:21:17] [I]       41.61       0.0360       0.0360       1.2   Reformatting CopyNode for Input Tensor 1 to PWN(PWN(PWN(/model.2/m.0/cv2/act/Sigmoid), PWN(/model.2/m.0/cv2/act/Mul)), PWN(/model.2/m.0/Add))
+[07/14/2026-23:21:17] [I]       53.50       0.0462       0.0462       1.6   PWN(PWN(PWN(/model.2/m.0/cv2/act/Sigmoid), PWN(/model.2/m.0/cv2/act/Mul)), PWN(/model.2/m.0/Add))
+[07/14/2026-23:21:17] [I]       76.96       0.0665       0.0665       2.3   Reformatting CopyNode for Output Tensor 0 to PWN(PWN(PWN(/model.2/m.0/cv2/act/Sigmoid), PWN(/model.2/m.0/cv2/act/Mul)), PWN(/model.2/m.0/Add))
+[07/14/2026-23:21:17] [I]       37.28       0.0322       0.0322       1.1   /model.2/Split_output_0 copy
+[07/14/2026-23:21:17] [I]       36.15       0.0312       0.0313       1.1   /model.2/Split_output_1 copy
+[07/14/2026-23:21:17] [I]       49.83       0.0431       0.0430       1.5   /model.2/cv2/conv/Conv + PWN(PWN(/model.2/cv2/act/Sigmoid), PWN(/model.2/cv2/act/Mul))
+[07/14/2026-23:21:17] [I]       61.11       0.0528       0.0528       1.8   /model.3/conv/Conv + PWN(PWN(/model.3/act/Sigmoid), PWN(/model.3/act/Mul))
+[07/14/2026-23:21:17] [I]       41.07       0.0355       0.0355       1.2   /model.4/cv1/conv/Conv + PWN(PWN(/model.4/cv1/act/Sigmoid), PWN(/model.4/cv1/act/Mul))
+[07/14/2026-23:21:17] [I]       13.69       0.0118       0.0118       0.4   /model.4/Split_4
+[07/14/2026-23:21:17] [I]       30.35       0.0262       0.0262       0.9   /model.4/m.0/cv1/conv/Conv + PWN(PWN(/model.4/m.0/cv1/act/Sigmoid), PWN(/model.4/m.0/cv1/act/Mul))
+[07/14/2026-23:21:17] [I]       37.65       0.0325       0.0325       1.1   /model.4/m.0/cv2/conv/Conv + PWN(PWN(PWN(/model.4/m.0/cv2/act/Sigmoid), PWN(/model.4/m.0/cv2/act/Mul)), PWN(/model.4/m.0/Add))
+[07/14/2026-23:21:17] [I]       28.56       0.0247       0.0247       0.8   /model.4/m.1/cv1/conv/Conv + PWN(PWN(/model.4/m.1/cv1/act/Sigmoid), PWN(/model.4/m.1/cv1/act/Mul))
+[07/14/2026-23:21:17] [I]       37.95       0.0328       0.0328       1.1   /model.4/m.1/cv2/conv/Conv + PWN(PWN(PWN(/model.4/m.1/cv2/act/Sigmoid), PWN(/model.4/m.1/cv2/act/Mul)), PWN(/model.4/m.1/Add))
+[07/14/2026-23:21:17] [I]       13.32       0.0115       0.0115       0.4   /model.4/Split_output_0 copy
+[07/14/2026-23:21:17] [I]       12.81       0.0111       0.0111       0.4   /model.4/Split_output_1 copy
+[07/14/2026-23:21:17] [I]       13.07       0.0113       0.0113       0.4   /model.4/m.0/Add_output_0 copy
+[07/14/2026-23:21:17] [I]       12.73       0.0110       0.0110       0.4   /model.4/m.1/Add_output_0 copy
+[07/14/2026-23:21:17] [I]       43.62       0.0377       0.0377       1.3   /model.4/cv2/conv/Conv + PWN(PWN(/model.4/cv2/act/Sigmoid), PWN(/model.4/cv2/act/Mul))
+[07/14/2026-23:21:17] [I]       39.39       0.0340       0.0340       1.2   /model.5/conv/Conv + PWN(PWN(/model.5/act/Sigmoid), PWN(/model.5/act/Mul))
+[07/14/2026-23:21:17] [I]       32.44       0.0280       0.0280       1.0   /model.6/cv1/conv/Conv + PWN(PWN(/model.6/cv1/act/Sigmoid), PWN(/model.6/cv1/act/Mul))
+[07/14/2026-23:21:17] [I]       10.49       0.0091       0.0090       0.3   /model.6/Split_7
+[07/14/2026-23:21:17] [I]       39.53       0.0342       0.0342       1.2   /model.6/m.0/cv1/conv/Conv + PWN(PWN(/model.6/m.0/cv1/act/Sigmoid), PWN(/model.6/m.0/cv1/act/Mul))
+[07/14/2026-23:21:17] [I]       25.67       0.0222       0.0222       0.8   /model.6/m.0/cv2/conv/Conv + PWN(PWN(PWN(/model.6/m.0/cv2/act/Sigmoid), PWN(/model.6/m.0/cv2/act/Mul)), PWN(/model.6/m.0/Add))
+[07/14/2026-23:21:17] [I]       22.40       0.0194       0.0193       0.7   /model.6/m.1/cv1/conv/Conv + PWN(PWN(/model.6/m.1/cv1/act/Sigmoid), PWN(/model.6/m.1/cv1/act/Mul))
+[07/14/2026-23:21:17] [I]       25.60       0.0221       0.0221       0.8   /model.6/m.1/cv2/conv/Conv + PWN(PWN(PWN(/model.6/m.1/cv2/act/Sigmoid), PWN(/model.6/m.1/cv2/act/Mul)), PWN(/model.6/m.1/Add))
+[07/14/2026-23:21:17] [I]       10.04       0.0087       0.0087       0.3   /model.6/Split_output_0 copy
+[07/14/2026-23:21:17] [I]        9.60       0.0083       0.0083       0.3   /model.6/Split_output_1 copy
+[07/14/2026-23:21:17] [I]        9.91       0.0086       0.0086       0.3   /model.6/m.0/Add_output_0 copy
+[07/14/2026-23:21:17] [I]        9.57       0.0083       0.0083       0.3   /model.6/m.1/Add_output_0 copy
+[07/14/2026-23:21:17] [I]       36.71       0.0317       0.0317       1.1   /model.6/cv2/conv/Conv + PWN(PWN(/model.6/cv2/act/Sigmoid), PWN(/model.6/cv2/act/Mul))
+[07/14/2026-23:21:17] [I]       36.16       0.0313       0.0312       1.1   /model.7/conv/Conv + PWN(PWN(/model.7/act/Sigmoid), PWN(/model.7/act/Mul))
+[07/14/2026-23:21:17] [I]       16.93       0.0146       0.0147       0.5   /model.8/cv1/conv/Conv + PWN(PWN(/model.8/cv1/act/Sigmoid), PWN(/model.8/cv1/act/Mul))
+[07/14/2026-23:21:17] [I]        8.79       0.0076       0.0076       0.3   /model.8/Split_10
+[07/14/2026-23:21:17] [I]       21.67       0.0187       0.0187       0.6   /model.8/m.0/cv1/conv/Conv + PWN(PWN(/model.8/m.0/cv1/act/Sigmoid), PWN(/model.8/m.0/cv1/act/Mul))
+[07/14/2026-23:21:17] [I]       24.58       0.0212       0.0212       0.7   /model.8/m.0/cv2/conv/Conv + PWN(PWN(PWN(/model.8/m.0/cv2/act/Sigmoid), PWN(/model.8/m.0/cv2/act/Mul)), PWN(/model.8/m.0/Add))
+[07/14/2026-23:21:17] [I]        8.82       0.0076       0.0077       0.3   /model.8/Split_output_0 copy
+[07/14/2026-23:21:17] [I]        8.15       0.0070       0.0070       0.2   /model.8/Split_output_1 copy
+[07/14/2026-23:21:17] [I]        8.21       0.0071       0.0071       0.2   /model.8/m.0/Add_output_0 copy
+[07/14/2026-23:21:17] [I]       38.00       0.0328       0.0328       1.1   /model.8/cv2/conv/Conv + PWN(PWN(/model.8/cv2/act/Sigmoid), PWN(/model.8/cv2/act/Mul))
+[07/14/2026-23:21:17] [I]       15.23       0.0132       0.0131       0.4   /model.9/cv1/conv/Conv
+[07/14/2026-23:21:17] [I]       21.53       0.0186       0.0187       0.6   /model.9/m/MaxPool
+[07/14/2026-23:21:17] [I]       20.60       0.0178       0.0178       0.6   /model.9/m_1/MaxPool
+[07/14/2026-23:21:17] [I]       20.28       0.0175       0.0175       0.6   /model.9/m_2/MaxPool
+[07/14/2026-23:21:17] [I]        8.26       0.0071       0.0071       0.2   /model.9/cv1/conv/Conv_output_0 copy
+[07/14/2026-23:21:17] [I]        8.26       0.0071       0.0071       0.2   /model.9/m/MaxPool_output_0 copy
+[07/14/2026-23:21:17] [I]        8.22       0.0071       0.0071       0.2   /model.9/m_1/MaxPool_output_0 copy
+[07/14/2026-23:21:17] [I]       35.71       0.0309       0.0309       1.0   /model.9/cv2/conv/Conv + PWN(PWN(/model.9/cv2/act/Sigmoid), PWN(/model.9/cv2/act/Mul))
+[07/14/2026-23:21:17] [I]       17.30       0.0150       0.0149       0.5   /model.10/Resize
+[07/14/2026-23:21:17] [I]       19.52       0.0169       0.0168       0.6   /model.10/Resize_output_0 copy
+[07/14/2026-23:21:17] [I]       21.86       0.0189       0.0189       0.6   /model.12/cv1/conv/Conv + PWN(PWN(/model.12/cv1/act/Sigmoid), PWN(/model.12/cv1/act/Mul))
+[07/14/2026-23:21:17] [I]       39.56       0.0342       0.0342       1.2   /model.12/m.0/cv1/conv/Conv + PWN(PWN(/model.12/m.0/cv1/act/Sigmoid), PWN(/model.12/m.0/cv1/act/Mul))
+[07/14/2026-23:21:17] [I]       19.16       0.0166       0.0165       0.6   /model.12/m.0/cv2/conv/Conv + PWN(PWN(/model.12/m.0/cv2/act/Sigmoid), PWN(/model.12/m.0/cv2/act/Mul))
+[07/14/2026-23:21:17] [I]       10.14       0.0088       0.0087       0.3   /model.12/Split_output_0 copy
+[07/14/2026-23:21:17] [I]        9.55       0.0083       0.0083       0.3   /model.12/Split_output_1 copy
+[07/14/2026-23:21:17] [I]       33.17       0.0287       0.0287       1.0   /model.12/cv2/conv/Conv + PWN(PWN(/model.12/cv2/act/Sigmoid), PWN(/model.12/cv2/act/Mul))
+[07/14/2026-23:21:17] [I]       26.02       0.0225       0.0225       0.8   /model.13/Resize
+[07/14/2026-23:21:17] [I]       32.07       0.0277       0.0277       0.9   /model.13/Resize_output_0 copy
+[07/14/2026-23:21:17] [I]       30.39       0.0263       0.0263       0.9   /model.15/cv1/conv/Conv + PWN(PWN(/model.15/cv1/act/Sigmoid), PWN(/model.15/cv1/act/Mul))
+[07/14/2026-23:21:17] [I]       31.09       0.0269       0.0268       0.9   /model.15/m.0/cv1/conv/Conv + PWN(PWN(/model.15/m.0/cv1/act/Sigmoid), PWN(/model.15/m.0/cv1/act/Mul))
+[07/14/2026-23:21:17] [I]       28.39       0.0245       0.0245       0.8   /model.15/m.0/cv2/conv/Conv + PWN(PWN(/model.15/m.0/cv2/act/Sigmoid), PWN(/model.15/m.0/cv2/act/Mul))
+[07/14/2026-23:21:17] [I]       13.70       0.0118       0.0118       0.4   /model.15/Split_output_0 copy
+[07/14/2026-23:21:17] [I]       12.87       0.0111       0.0112       0.4   /model.15/Split_output_1 copy
+[07/14/2026-23:21:17] [I]       33.59       0.0290       0.0290       1.0   /model.15/cv2/conv/Conv + PWN(PWN(/model.15/cv2/act/Sigmoid), PWN(/model.15/cv2/act/Mul))
+[07/14/2026-23:21:17] [I]       39.59       0.0342       0.0342       1.2   /model.16/conv/Conv + PWN(PWN(/model.16/act/Sigmoid), PWN(/model.16/act/Mul))
+[07/14/2026-23:21:17] [I]       15.28       0.0132       0.0132       0.4   /model.12/cv2/act/Mul_output_0 copy
+[07/14/2026-23:21:17] [I]       22.20       0.0192       0.0192       0.7   /model.18/cv1/conv/Conv + PWN(PWN(/model.18/cv1/act/Sigmoid), PWN(/model.18/cv1/act/Mul))
+[07/14/2026-23:21:17] [I]       22.24       0.0192       0.0192       0.7   /model.18/m.0/cv1/conv/Conv + PWN(PWN(/model.18/m.0/cv1/act/Sigmoid), PWN(/model.18/m.0/cv1/act/Mul))
+[07/14/2026-23:21:17] [I]       19.11       0.0165       0.0165       0.6   /model.18/m.0/cv2/conv/Conv + PWN(PWN(/model.18/m.0/cv2/act/Sigmoid), PWN(/model.18/m.0/cv2/act/Mul))
+[07/14/2026-23:21:17] [I]       10.08       0.0087       0.0087       0.3   /model.18/Split_output_0 copy
+[07/14/2026-23:21:17] [I]        9.48       0.0082       0.0082       0.3   /model.18/Split_output_1 copy
+[07/14/2026-23:21:17] [I]       18.89       0.0163       0.0164       0.6   /model.18/cv2/conv/Conv + PWN(PWN(/model.18/cv2/act/Sigmoid), PWN(/model.18/cv2/act/Mul))
+[07/14/2026-23:21:17] [I]       22.83       0.0197       0.0197       0.7   /model.19/conv/Conv + PWN(PWN(/model.19/act/Sigmoid), PWN(/model.19/act/Mul))
+[07/14/2026-23:21:17] [I]       10.67       0.0092       0.0092       0.3   /model.9/cv2/act/Mul_output_0 copy
+[07/14/2026-23:21:17] [I]       37.54       0.0324       0.0324       1.1   /model.21/cv1/conv/Conv + PWN(PWN(/model.21/cv1/act/Sigmoid), PWN(/model.21/cv1/act/Mul))
+[07/14/2026-23:21:17] [I]       20.29       0.0175       0.0176       0.6   /model.21/m.0/cv1/conv/Conv + PWN(PWN(/model.21/m.0/cv1/act/Sigmoid), PWN(/model.21/m.0/cv1/act/Mul))
+[07/14/2026-23:21:17] [I]       21.66       0.0187       0.0187       0.6   /model.21/m.0/cv2/conv/Conv + PWN(PWN(/model.21/m.0/cv2/act/Sigmoid), PWN(/model.21/m.0/cv2/act/Mul))
+[07/14/2026-23:21:17] [I]        8.80       0.0076       0.0076       0.3   /model.21/Split_output_0 copy
+[07/14/2026-23:21:17] [I]        8.28       0.0072       0.0071       0.2   /model.21/Split_output_1 copy
+[07/14/2026-23:21:17] [I]       22.32       0.0193       0.0193       0.7   /model.21/cv2/conv/Conv + PWN(PWN(/model.21/cv2/act/Sigmoid), PWN(/model.21/cv2/act/Mul))
+[07/14/2026-23:21:17] [I]       23.51       0.0203       0.0203       0.7   /model.22/cv2.2/cv2.2.0/conv/Conv + PWN(PWN(/model.22/cv2.2/cv2.2.0/act/Sigmoid), PWN(/model.22/cv2.2/cv2.2.0/act/Mul))
+[07/14/2026-23:21:17] [I]       13.66       0.0118       0.0118       0.4   /model.22/cv2.2/cv2.2.1/conv/Conv + PWN(PWN(/model.22/cv2.2/cv2.2.1/act/Sigmoid), PWN(/model.22/cv2.2/cv2.2.1/act/Mul))
+[07/14/2026-23:21:17] [I]       18.46       0.0160       0.0159       0.5   /model.22/cv2.2/cv2.2.2/Conv
+[07/14/2026-23:21:17] [I]        8.50       0.0073       0.0074       0.2   /model.22/Reshape_2_copy_output
+[07/14/2026-23:21:17] [I]       21.55       0.0186       0.0186       0.6   /model.22/cv3.2/cv3.2.0/conv/Conv + PWN(PWN(/model.22/cv3.2/cv3.2.0/act/Sigmoid), PWN(/model.22/cv3.2/cv3.2.0/act/Mul))
+[07/14/2026-23:21:17] [I]       13.74       0.0119       0.0119       0.4   /model.22/cv3.2/cv3.2.1/conv/Conv + PWN(PWN(/model.22/cv3.2/cv3.2.1/act/Sigmoid), PWN(/model.22/cv3.2/cv3.2.1/act/Mul))
+[07/14/2026-23:21:17] [I]       14.12       0.0122       0.0122       0.4   /model.22/cv3.2/cv3.2.2/Conv
+[07/14/2026-23:21:17] [I]        6.69       0.0058       0.0058       0.2   /model.22/Reshape_5_copy_output
+[07/14/2026-23:21:17] [I]       45.26       0.0391       0.0392       1.3   /model.22/cv2.1/cv2.1.0/conv/Conv + PWN(PWN(/model.22/cv2.1/cv2.1.0/act/Sigmoid), PWN(/model.22/cv2.1/cv2.1.0/act/Mul))
+[07/14/2026-23:21:17] [I]       18.64       0.0161       0.0161       0.5   /model.22/cv2.1/cv2.1.1/conv/Conv + PWN(PWN(/model.22/cv2.1/cv2.1.1/act/Sigmoid), PWN(/model.22/cv2.1/cv2.1.1/act/Mul))
+[07/14/2026-23:21:17] [I]       21.08       0.0182       0.0182       0.6   /model.22/cv2.1/cv2.1.2/Conv
+[07/14/2026-23:21:17] [I]       12.04       0.0104       0.0104       0.4   /model.22/Reshape_1_copy_output
+[07/14/2026-23:21:17] [I]       25.64       0.0222       0.0222       0.8   /model.22/cv3.1/cv3.1.0/conv/Conv + PWN(PWN(/model.22/cv3.1/cv3.1.0/act/Sigmoid), PWN(/model.22/cv3.1/cv3.1.0/act/Mul))
+[07/14/2026-23:21:17] [I]       18.99       0.0164       0.0164       0.6   /model.22/cv3.1/cv3.1.1/conv/Conv + PWN(PWN(/model.22/cv3.1/cv3.1.1/act/Sigmoid), PWN(/model.22/cv3.1/cv3.1.1/act/Mul))
+[07/14/2026-23:21:17] [I]       14.60       0.0126       0.0126       0.4   /model.22/cv3.1/cv3.1.2/Conv
+[07/14/2026-23:21:17] [I]        6.58       0.0057       0.0057       0.2   /model.22/Reshape_4_copy_output
+[07/14/2026-23:21:17] [I]       46.54       0.0402       0.0403       1.4   /model.22/cv2.0/cv2.0.0/conv/Conv + PWN(PWN(/model.22/cv2.0/cv2.0.0/act/Sigmoid), PWN(/model.22/cv2.0/cv2.0.0/act/Mul))
+[07/14/2026-23:21:17] [I]       44.49       0.0384       0.0384       1.3   /model.22/cv2.0/cv2.0.1/conv/Conv + PWN(PWN(/model.22/cv2.0/cv2.0.1/act/Sigmoid), PWN(/model.22/cv2.0/cv2.0.1/act/Mul))
+[07/14/2026-23:21:17] [I]       51.13       0.0442       0.0443       1.5   /model.22/cv2.0/cv2.0.2/Conv
+[07/14/2026-23:21:17] [I]       41.39       0.0358       0.0357       1.2   /model.22/Reshape_copy_output
+[07/14/2026-23:21:17] [I]       94.11       0.0813       0.0813       2.8   /model.22/dfl/Reshape + /model.22/dfl/Transpose
+[07/14/2026-23:21:17] [I]       75.82       0.0655       0.0655       2.2   /model.22/dfl/Softmax
+[07/14/2026-23:21:17] [I]       87.29       0.0754       0.0755       2.6   /model.22/dfl/conv/Conv
+[07/14/2026-23:21:17] [I]       64.28       0.0556       0.0556       1.9   /model.22/cv3.0/cv3.0.0/conv/Conv + PWN(PWN(/model.22/cv3.0/cv3.0.0/act/Sigmoid), PWN(/model.22/cv3.0/cv3.0.0/act/Mul))
+[07/14/2026-23:21:17] [I]       45.08       0.0390       0.0389       1.3   /model.22/cv3.0/cv3.0.1/conv/Conv + PWN(PWN(/model.22/cv3.0/cv3.0.1/act/Sigmoid), PWN(/model.22/cv3.0/cv3.0.1/act/Mul))
+[07/14/2026-23:21:17] [I]       22.20       0.0192       0.0192       0.7   /model.22/cv3.0/cv3.0.2/Conv
+[07/14/2026-23:21:17] [I]        6.93       0.0060       0.0060       0.2   /model.22/Reshape_3_copy_output
+[07/14/2026-23:21:17] [I]        8.40       0.0073       0.0072       0.2   PWN(/model.22/Sigmoid)
+[07/14/2026-23:21:17] [I]        9.83       0.0085       0.0085       0.3   PWN(/model.22/Add_1)
+[07/14/2026-23:21:17] [I]        9.13       0.0079       0.0079       0.3   PWN(/model.22/Sub)
+[07/14/2026-23:21:17] [I]        8.43       0.0073       0.0072       0.2   PWN(/model.22/Sub_1)
+[07/14/2026-23:21:17] [I]        8.13       0.0070       0.0071       0.2   PWN(PWN(/model.22/Add_2), PWN(/model.22/Constant_14_output_0 + ONNXTRT_Broadcast, PWN(/model.22/Div_1)))
+[07/14/2026-23:21:17] [I]        7.35       0.0064       0.0063       0.2   /model.22/Div_1_output_0 copy
+[07/14/2026-23:21:17] [I]       10.81       0.0093       0.0093       0.3   PWN(/model.22/Mul_2)
+[07/14/2026-23:21:17] [I]        7.49       0.0065       0.0065       0.2   /model.22/Mul_2_output_0 copy
+[07/14/2026-23:21:17] [I]     3410.21       2.9475       2.9474     100.0   Total
+[07/14/2026-23:21:17] [I] 
+&&&& PASSED TensorRT.trtexec [TensorRT v100700] [b23] # /usr/src/tensorrt/bin/trtexec --loadEngine=/home/loki/Documents/papers/quantization/runs/engines/yolov8n_int8_ptq.engine --warmUp=500 --iterations=1000 --dumpProfile --separateProfileRun --percentile=50,95

@@ -1,7 +1,13 @@
-condition,engine_file,map50,map50_95,latency_p50_ms,latency_p95_ms,throughput_fps,gpu_memory_mb,model_size_mb
-YOLOv8n FP32 (baseline),yolov8n_fp32.engine,0.9803,0.6433,,,,,13.18
-YOLOv8n FP16,yolov8n_fp16.engine,0.9803,0.6433,,,,,8.65
-YOLOv8n INT8 PTQ (uniform),yolov8n_int8_ptq.engine,0.9803,0.6433,,,,,4.49
-YOLOv8n Mixed-PTQ tight,yolov8n_mixed_tight.engine,0.9803,0.6433,3.24341,3.67706,327.915,,4.49
-YOLOv8n Mixed-PTQ medium,yolov8n_mixed_medium.engine,0.9803,0.6433,3.17065,3.6308,336.218,,4.48
-YOLOv8n Mixed-PTQ relaxed,yolov8n_mixed_relaxed.engine,0.9803,0.6433,3.17139,3.59512,337.009,,4.46
+condition,engine_file,map50,map50_95,latency_p50_ms,latency_p50_std_ms,latency_p95_ms,throughput_fps,throughput_std_fps,gpu_memory_mb,model_size_mb
+YOLOv8n FP32 (baseline),yolov8n_fp32.engine,0.8809,0.5375,6.7242,0.0141,6.7593,156.18,0.33,,13.11
+YOLOv8n FP16,yolov8n_fp16.engine,0.8808,0.5373,3.9301,0.0055,3.9399,278.21,0.44,,8.55
+YOLOv8n INT8 PTQ (uniform),yolov8n_int8_ptq.engine,0.8334,0.4554,3.0804,0.0152,3.0989,354.85,1.98,,4.81
+YOLOv8n Mixed-PTQ tight,yolov8n_mixed_tight.engine,0.8868,0.5306,3.7581,0.0063,3.7717,286.69,0.58,,7.4
+YOLOv8n Mixed-PTQ medium,yolov8n_mixed_medium.engine,0.8865,0.5359,3.7709,0.0093,3.7822,285.62,0.82,,7.9
+YOLOv8n Mixed-PTQ relaxed,yolov8n_mixed_relaxed.engine,0.8875,0.5381,4.0923,0.0082,4.1032,264.85,0.5,,8.11
+YOLOv8n Mixed-HAWQ tight,yolov8n_mixed_hawq_tight.engine,0.8846,0.551,3.979,0.0066,3.9908,273.43,0.42,,6.76
+YOLOv8n Mixed-HAWQ medium,yolov8n_mixed_hawq_medium.engine,0.8802,0.5493,4.0435,0.0092,4.0535,268.84,0.59,,7.48
+YOLOv8n Mixed-HAWQ relaxed,yolov8n_mixed_hawq_relaxed.engine,0.8789,0.5511,4.0022,0.0075,4.0134,271.67,0.57,,8.42
+YOLOv8n Mixed-FLOPsProxy tight,yolov8n_mixed_flopsproxy_tight.engine,0.8863,0.5313,3.7517,0.0058,3.7657,286.83,0.48,,7.21
+YOLOv8n Mixed-FLOPsProxy medium,yolov8n_mixed_flopsproxy_medium.engine,0.8873,0.532,3.7515,0.0072,3.7642,286.96,0.69,,7.53
+YOLOv8n Mixed-FLOPsProxy relaxed,yolov8n_mixed_flopsproxy_relaxed.engine,0.8855,0.5352,3.6934,0.0046,3.7057,292.1,0.41,,8.21

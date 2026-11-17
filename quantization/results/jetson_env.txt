@@ -1,0 +1,16 @@
+$ nvpmodel -q
+NV Power Mode: MAXN_SUPER
+2
+
+$ jetson_clocks --show
+SOC family:tegra234  Machine:NVIDIA Jetson Orin Nano Engineering Reference Developer Kit Super
+Error: Run this script(/usr/bin/jetson_clocks) as a root user
+
+$ cat /etc/nv_tegra_release
+# R36 (release), REVISION: 5.0, GCID: 43688277, BOARD: generic, EABI: aarch64, DATE: Fri Jan 16 03:50:45 UTC 2026
+# KERNEL_VARIANT: oot
+TARGET_USERSPACE_LIB_DIR=nvidia
+TARGET_USERSPACE_LIB_DIR_PATH=usr/lib/aarch64-linux-gnu/nvidia
+
+$ uname -a
+Linux loki-desktop 5.15.185-tegra #1 SMP PREEMPT Thu Jan 15 19:24:38 PST 2026 aarch64 aarch64 aarch64 GNU/Linux

@@ -37,10 +37,10 @@ plt.rcParams.update({
 CONDITION_COLORS = {
     "FP32":         "#2196F3",
     "FP16":         "#4CAF50",
-    "INT8 PTQ":     "#FF5722",
-    "Mixed tight":  "#9C27B0",
-    "Mixed medium": "#673AB7",
-    "Mixed relaxed":"#3F51B5",
+    "Uniform INT8": "#FF5722",
+    "Ours":         "#9C27B0",
+    "HAWQ":         "#FF9800",
+    "FLOPs":        "#00897B",
     "Reference":    "#9E9E9E",
 }
 
@@ -58,14 +58,20 @@ def plot_pareto(results_csv: Path):
         return
 
     rows = load_csv(results_csv)
-    rows = [r for r in rows if r["map50"] and r["latency_p50_ms"]]
+    rows = [r for r in rows if r["map50_95"] and r["latency_p50_ms"]]
 
     fig, ax = plt.subplots(figsize=(7, 5))
 
-    for row in rows:
-        label   = row["condition"]
+    SHORT = [("YOLOv8n ", ""), ("Mixed-PTQ", "Ours"),
+             ("Mixed-FLOPsProxy", "FLOPs"), ("Mixed-HAWQ", "HAWQ"),
+             ("INT8 PTQ (uniform)", "Uniform INT8"), (" (baseline)", "")]
+    offsets = [(6, 4), (6, -11), (-4, 8), (6, 4), (-4, -13), (6, -4)]
+    for i, row in enumerate(rows):
+        label = row["condition"]
+        for a, b in SHORT:
+            label = label.replace(a, b)
         x       = float(row["latency_p50_ms"])
-        y       = float(row["map50"]) * 100
+        y       = float(row["map50_95"]) * 100
 
         color = "#607D8B"
         for key, c in CONDITION_COLORS.items():
@@ -84,27 +90,27 @@ def plot_pareto(results_csv: Path):
         ax.errorbar(x, y, xerr=xerr, fmt="none", ecolor=color,
                     elinewidth=1, capsize=2, zorder=4)
         ax.scatter(x, y, c=color, marker=marker, s=80, zorder=5)
-        ax.annotate(
-            label.replace("YOLOv8n ", "").replace("YOLOv8", "v8"),
-            xy=(x, y), xytext=(5, 3), textcoords="offset points",
-            fontsize=7, color="#333333",
-        )
+        dx, dy = offsets[i % len(offsets)]
+        ax.annotate(label, xy=(x, y), xytext=(dx, dy),
+                    textcoords="offset points", fontsize=7, color="#333333",
+                    ha="left" if dx > 0 else "right")
 
     # Draw Pareto frontier
     sorted_rows = sorted(rows, key=lambda r: float(r["latency_p50_ms"]))
     pareto, best_map = [], -1
     for r in sorted_rows:
-        m = float(r["map50"])
+        m = float(r["map50_95"])
         if m > best_map:
             pareto.append(r)
             best_map = m
     if len(pareto) > 1:
         px = [float(r["latency_p50_ms"]) for r in pareto]
-        py = [float(r["map50"]) * 100      for r in pareto]
+        py = [float(r["map50_95"]) * 100   for r in pareto]
         ax.plot(px, py, "k--", linewidth=1, alpha=0.5, label="Pareto frontier")
 
-    ax.set_xlabel("Inference Latency P50 (ms)")
-    ax.set_ylabel("mAP50 (%)")
+    ax.set_xlabel("Inference latency P50 (ms), median of 5 runs")
+    ax.set_ylabel("mAP50-95 (%), full validation split")
+    ax.margins(x=0.09)
     ax.set_title("Accuracy–Latency Pareto Frontier\n(Jetson Orin Nano Super)")
     ax.grid(True, linestyle="--", alpha=0.4)
     ax.legend()
@@ -124,13 +130,17 @@ def plot_latency_heatmap(latency_csv: Path):
         return
 
     rows = load_csv(latency_csv)
-    names     = [r["layer_name"] for r in rows]          # full dotted names
-    latencies = [float(r["latency_ms"]) for r in rows]
-    source    = rows[0].get("source", "") if rows else ""
-    src_label = {"jetson_pytorch": "PyTorch CUDA-event timing",
-                 "jetson_trtexec": "trtexec fused-layer profile",
-                 "gpu_proxy":      "FLOPs proxy (workstation)"}.get(
-                     source, source or "measured")
+    names = [r["layer_name"] for r in rows]              # full dotted names
+    if "lat_fp16_ms" in rows[0]:                          # 03c measured profile
+        latencies = [float(r["lat_fp16_ms"]) for r in rows]
+        src_label = "measured FP16 engine profile, trtexec"
+    else:
+        latencies = [float(r["latency_ms"]) for r in rows]
+        source = rows[0].get("source", "")
+        src_label = {"jetson_pytorch": "PyTorch CUDA-event timing",
+                     "jetson_trtexec": "trtexec fused-layer profile",
+                     "gpu_proxy":      "FLOPs proxy (workstation)"}.get(
+                         source, source or "measured")
 
     top_n = 40
     if len(rows) > top_n:
@@ -385,10 +395,11 @@ def plot_crossdataset(primary_csv: Path, coco_csv: Path):
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    # Prefer trtexec fused-layer profile for the heatmap (real Jetson measurements).
-    # Fall back to PyTorch-measured Jetson latency, then proxy.
-    if (RESULTS_DIR / "trtexec_layer_profile.csv").exists():
-        latency_csv = RESULTS_DIR / "trtexec_layer_profile.csv"
+    # Prefer the measured per-Conv2d FP16/INT8 profile (03c) — the same
+    # latency the assignment algorithm uses.  Fall back to PyTorch-measured
+    # Jetson latency, then proxy.
+    if (RESULTS_DIR / "layer_latency_measured.csv").exists():
+        latency_csv = RESULTS_DIR / "layer_latency_measured.csv"
     elif (RESULTS_DIR / "layer_latency_jetson.csv").exists():
         latency_csv = RESULTS_DIR / "layer_latency_jetson.csv"
     else:
